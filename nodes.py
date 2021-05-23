@@ -21,7 +21,7 @@ class Node(object):
                           game_config.Movements.DOWN: None,
                           game_config.Movements.LEFT: None,
                           game_config.Movements.RIGHT: None}
-        self.portalNode = None
+        self.portal_node = None
         self.portalVal = 0
 
     def render(self, screen):
@@ -35,44 +35,43 @@ class Node(object):
 
 class NodeGroup(object):
     def __init__(self, level):
-        self.nodeList = []
+        self.node_list = []
         self.level = level
         self.grid = None
         self.nodeStack = Stack()
         self.portalSymbols = ["1"]
         self.nodeSymbols = ["+"] + self.portalSymbols
-        self.create_node_list(level, self.nodeList)
+        self.create_node_list(level, self.node_list)
         self.setup_portal_nodes()
 
     @staticmethod
-    def read_maze_file(textfile):
-        f = open(textfile, "r")
+    def read_maze_file(maze_file):
+        f = open(maze_file, "r")
         lines = [line.rstrip('\n') for line in f]
         lines = [line.rstrip('\r') for line in lines]
         return [line.split(' ') for line in lines]
 
-    def create_node_list(self, textFile, nodeList):
-        self.grid = self.read_maze_file(textFile)
-        startNode = self.find_first_node(len(self.grid), len(self.grid[0]))
-        self.nodeStack.push(startNode)
+    def create_node_list(self, text_file, node_list):
+        self.grid = self.read_maze_file(text_file)
+        start_node = self.find_first_node(len(self.grid), len(self.grid[0]))
+        self.nodeStack.push(start_node)
         while not self.nodeStack.isEmpty():
             node = self.nodeStack.pop()
-            self.add_node(node, nodeList)
-            leftNode = self.get_path_node(game_config.Movements.LEFT, node.row, node.column - 1, nodeList)
-            rightNode = self.get_path_node(game_config.Movements.RIGHT, node.row, node.column + 1, nodeList)
-            upNode = self.get_path_node(game_config.Movements.UP, node.row - 1, node.column, nodeList)
-            downNode = self.get_path_node(game_config.Movements.DOWN, node.row + 1, node.column, nodeList)
-            node.neighbors[game_config.Movements.LEFT] = leftNode
-            node.neighbors[game_config.Movements.RIGHT] = rightNode
-            node.neighbors[game_config.Movements.UP] = upNode
-            node.neighbors[game_config.Movements.DOWN] = downNode
-            self.add_node_to_stack(leftNode, nodeList)
-            self.add_node_to_stack(rightNode, nodeList)
-            self.add_node_to_stack(upNode, nodeList)
-            self.add_node_to_stack(downNode, nodeList)
+            self.add_node(node, node_list)
+            left_node = self.get_path_node(game_config.Movements.LEFT, node.row, node.column - 1, node_list)
+            right_node = self.get_path_node(game_config.Movements.RIGHT, node.row, node.column + 1, node_list)
+            up_node = self.get_path_node(game_config.Movements.UP, node.row - 1, node.column, node_list)
+            down_node = self.get_path_node(game_config.Movements.DOWN, node.row + 1, node.column, node_list)
+            node.neighbors[game_config.Movements.LEFT] = left_node
+            node.neighbors[game_config.Movements.RIGHT] = right_node
+            node.neighbors[game_config.Movements.UP] = up_node
+            node.neighbors[game_config.Movements.DOWN] = down_node
+            self.add_node_to_stack(left_node, node_list)
+            self.add_node_to_stack(right_node, node_list)
+            self.add_node_to_stack(up_node, node_list)
+            self.add_node_to_stack(down_node, node_list)
 
     def find_first_node(self, rows, cols):
-        nodeFound = False
         for row in range(rows):
             for col in range(cols):
                 if self.grid[row][col] in self.nodeSymbols:
@@ -83,36 +82,36 @@ class NodeGroup(object):
         return None
 
     @staticmethod
-    def get_node(x, y, nodeList=[]):
-        for node in nodeList:
+    def get_node(x, y, node_list=[]):
+        for node in node_list:
             if node.position.x == x and node.position.y == y:
                 return node
         return None
 
     @staticmethod
-    def get_node_from_node(node, nodeList):
+    def get_node_from_node(node, node_list):
         if node is not None:
-            for inode in nodeList:
+            for inode in node_list:
                 if node.row == inode.row and node.column == inode.column:
                     return inode
         return node
 
-    def get_path_node(self, direction, row, col, nodeList):
-        tempNode = self.follow_path(direction, row, col)
-        return self.get_node_from_node(tempNode, nodeList)
+    def get_path_node(self, direction, row, col, node_list):
+        temp_node = self.follow_path(direction, row, col)
+        return self.get_node_from_node(temp_node, node_list)
 
-    def add_node(self, node, nodeList):
-        nodeInList = self.node_in_list(node, nodeList)
-        if not nodeInList:
-            nodeList.append(node)
+    def add_node(self, node, node_list):
+        node_in_list = self.node_in_list(node, node_list)
+        if not node_in_list:
+            node_list.append(node)
 
-    def add_node_to_stack(self, node, nodeList):
-        if node is not None and not self.node_in_list(node, nodeList):
+    def add_node_to_stack(self, node, node_list):
+        if node is not None and not self.node_in_list(node, node_list):
             self.nodeStack.push(node)
 
     @staticmethod
-    def node_in_list(node, nodeList):
-        for inode in nodeList:
+    def node_in_list(node, node_list):
+        for inode in node_list:
             if node.position.x == inode.position.x and node.position.y == inode.position.y:
                 return True
         return False
@@ -132,8 +131,8 @@ class NodeGroup(object):
             return None
 
     def path_to_follow(self, direction, row, col, path):
-        tempSymbols = [path] + self.nodeSymbols
-        if self.grid[row][col] in tempSymbols:
+        temp_symbols = [path] + self.nodeSymbols
+        if self.grid[row][col] in temp_symbols:
             while self.grid[row][col] not in self.nodeSymbols:
                 if direction is game_config.Movements.LEFT:
                     col -= 1
@@ -151,18 +150,18 @@ class NodeGroup(object):
             return None
 
     def setup_portal_nodes(self):
-        portalDict = {}
-        for i in range(len(self.nodeList)):
-            if self.nodeList[i].portalVal != 0:
-                if self.nodeList[i].portalVal not in portalDict.keys():
-                    portalDict[self.nodeList[i].portalVal] = [i]
+        portal_dict = {}
+        for i in range(len(self.node_list)):
+            if self.node_list[i].portalVal != 0:
+                if self.node_list[i].portalVal not in portal_dict.keys():
+                    portal_dict[self.node_list[i].portalVal] = [i]
                 else:
-                    portalDict[self.nodeList[i].portalVal] += [i]
-        for key in portalDict.keys():
-            node1, node2 = portalDict[key]
-            self.nodeList[node1].portalNode = self.nodeList[node2]
-            self.nodeList[node2].portalNode = self.nodeList[node1]
+                    portal_dict[self.node_list[i].portalVal] += [i]
+        for key in portal_dict.keys():
+            node1, node2 = portal_dict[key]
+            self.node_list[node1].portal_node = self.node_list[node2]
+            self.node_list[node2].portal_node = self.node_list[node1]
 
     def render(self, screen):
-        for node in self.nodeList:
+        for node in self.node_list:
             node.render(screen)
