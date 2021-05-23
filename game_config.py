@@ -6,6 +6,7 @@ class GameDimensions:
     Especificações da tela de jogo
     """
     tile_w = 16
+    fps = 30
     tile_h = 16
     row_num = 36
     col_num = 28
