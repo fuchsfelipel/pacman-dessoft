@@ -33,6 +33,10 @@ class GameScreen:
         self.pellets = PointBallGroup("assets/bolinhas.txt")
         self.pacman = Pacman(self.nodes)
 
+        # Musica
+        music = pygame.mixer.music.load('assets/home_track.ogg')
+        pygame.mixer.music.play(1)
+
     def update(self):
         """
         Atualiza o status de todos os sprites

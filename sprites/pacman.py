@@ -1,5 +1,7 @@
 # --- Imports ---
 # PyGame
+import time
+
 import pygame
 
 # Módulo DIY
@@ -177,8 +179,11 @@ class Pacman(object):
             if (self.position - ball.position).magnitudeSquared() <= (ball.radius + self.collideRadius) ** 2:
                 # Soma os pontos ao placar atual
                 self.points += game_config.Points.point_balls
+
+
                 return ball
 
+        pygame.mixer.music.stop()
         return None
 
     def render(self, screen):

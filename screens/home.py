@@ -1,7 +1,11 @@
 # PyGame
 import pygame
 
+# DIY
 import game_config
+
+# Outros
+import os
 
 
 class HomeScreen:
