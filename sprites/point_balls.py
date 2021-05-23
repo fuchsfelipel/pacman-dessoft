@@ -65,8 +65,7 @@ class SuperPointBall(PointBall):
     def update(self, dt):
         """
         Atualiza a SuperPointBall --> Ou seja, faz ela piscar.
-        :param dt:
-        :return:
+        :param dt: Delta de Tempo
         """
         self.timer += dt
         if self.timer >= self.flashTime:
@@ -75,24 +74,44 @@ class SuperPointBall(PointBall):
 
 
 class PointBallGroup(object):
+    """
+    Esta classe rastreia todas as PointBalls do jogo
+    """
     def __init__(self, point_balls_file):
+        """
+        Inicializa o conjunto de PointBalls
+        :param point_balls_file: Arquivo com o padrão das PointBalls
+        """
         self.point_balls_list = []
         self.super_point_balls = []
         self.create_point_balls_list(point_balls_file)
 
     def update(self, dt):
+        """
+        Atualiza os status de todas as PointBalls.
+        :param dt: Delta de Tempo
+        """
         for super_point_balls in self.super_point_balls:
             super_point_balls.update(dt)
 
     def create_point_balls_list(self, point_balls_file):
+        """
+        Cria as listas que armazenam tanto PointBalls quanto SuperPointBalls.
+        :param point_balls_file: path para o arquivo das PointBalls
+        :return:
+        """
         grid = self.read_point_balls_file(point_balls_file)
         rows = len(grid)
         cols = len(grid[0])
         for row in range(rows):
             for col in range(cols):
+                # Vê onde estão os chars 'p' e cria uma PointBall no mesmo índice dele
                 if grid[row][col] == 'p':
                     self.point_balls_list.append(PointBall(col * game_config.GameDimensions.tile_w,
                                                            row * game_config.GameDimensions.tile_h))
+
+                # Vê onde estão os chars 'P
+                # ' e cria uma SuperPointBall no mesmo índice dele
                 elif grid[row][col] == 'P':
                     pp = SuperPointBall(col * game_config.GameDimensions.tile_w,
                                         row * game_config.GameDimensions.tile_h)
@@ -101,16 +120,32 @@ class PointBallGroup(object):
 
     @staticmethod
     def read_point_balls_file(point_balls_file):
+        """
+        Lê o arquvio com as PointBalls
+        :param point_balls_file:
+        :return:
+        """
         f = open(point_balls_file, "r")
+
+        # Remover chars ocultos
         lines = [line.rstrip('\n') for line in f]
         lines = [line.rstrip('\r') for line in lines]
+
+        # Retorna a linha como se fosse uma matriz
         return [line.split(' ') for line in lines]
 
     def is_empty(self):
+        """
+        Retorna se as PointBalls já acabaram
+        """
         if len(self.point_balls_list) == 0:
             return True
         return False
 
     def render(self, screen):
+        """
+        Renderiza as PointBalls
+        :param screen: Tela do PyGame
+        """
         for point_ball in self.point_balls_list:
             point_ball.render(screen)
