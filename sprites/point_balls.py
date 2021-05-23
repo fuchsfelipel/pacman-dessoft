@@ -59,13 +59,16 @@ class PointBallGroup(object):
         for row in range(rows):
             for col in range(cols):
                 if grid[row][col] == 'p':
-                    self.point_balls_list.append(PointBall(col * game_config.GameDimensions.tile_w, row * game_config.GameDimensions.tile_h))
+                    self.point_balls_list.append(PointBall(col * game_config.GameDimensions.tile_w,
+                                                           row * game_config.GameDimensions.tile_h))
                 elif grid[row][col] == 'P':
-                    pp = SuperPointBall(col * game_config.GameDimensions.tile_w, row * game_config.GameDimensions.tile_h)
+                    pp = SuperPointBall(col * game_config.GameDimensions.tile_w,
+                                        row * game_config.GameDimensions.tile_h)
                     self.point_balls_list.append(pp)
                     self.super_point_balls.append(pp)
 
-    def read_point_balls_file(self, point_balls_file):
+    @staticmethod
+    def read_point_balls_file(point_balls_file):
         f = open(point_balls_file, "r")
         lines = [line.rstrip('\n') for line in f]
         lines = [line.rstrip('\r') for line in lines]
