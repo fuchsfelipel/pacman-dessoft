@@ -71,3 +71,4 @@ class Points:
     Define os pontos de cada coisa
     """
     point_balls = 10
+    pacman_lives = 3  # o Pac-Man vai começar com 3 vidas
