@@ -12,6 +12,7 @@ class Pacman(object):
     Esta classe define o Pac-Man.
     Em grande parte, sua lógica deve-se ao tutorial pacmancode
     Dito isso, existe uma boa quantidade de código original ou refatorado/otimizado
+    Mudanças pontuais de lógica e regras de negócio também ocorreram
     """
 
     def __init__(self, nodes):
