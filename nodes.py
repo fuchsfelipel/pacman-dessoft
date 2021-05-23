@@ -44,8 +44,8 @@ class NodeGroup(object):
         self.create_node_list(level, self.nodeList)
         self.setup_portal_nodes()
 
-
-    def read_maze_file(self, textfile):
+    @staticmethod
+    def read_maze_file(textfile):
         f = open(textfile, "r")
         lines = [line.rstrip('\n') for line in f]
         lines = [line.rstrip('\r') for line in lines]
@@ -82,13 +82,15 @@ class NodeGroup(object):
                     return node
         return None
 
-    def get_node(self, x, y, nodeList=[]):
+    @staticmethod
+    def get_node(x, y, nodeList=[]):
         for node in nodeList:
             if node.position.x == x and node.position.y == y:
                 return node
         return None
 
-    def get_node_from_node(self, node, nodeList):
+    @staticmethod
+    def get_node_from_node(node, nodeList):
         if node is not None:
             for inode in nodeList:
                 if node.row == inode.row and node.column == inode.column:
@@ -108,7 +110,8 @@ class NodeGroup(object):
         if node is not None and not self.node_in_list(node, nodeList):
             self.nodeStack.push(node)
 
-    def node_in_list(self, node, nodeList):
+    @staticmethod
+    def node_in_list(node, nodeList):
         for inode in nodeList:
             if node.position.x == inode.position.x and node.position.y == inode.position.y:
                 return True
