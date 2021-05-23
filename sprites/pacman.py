@@ -126,14 +126,18 @@ class Pacman(object):
                     self.direction = direction
 
             else:
-                # Se a direção não for None vamos mudar o target
-                if self.node.neighbors[self.direction] is not None:
-                    self.target = self.node.neighbors[self.direction]
+                # Vamos usar o try para descartar teclas inválidas
+                try:
+                    # Se a direção não for None vamos mudar o target
+                    if self.node.neighbors[self.direction] is not None:
+                        self.target = self.node.neighbors[self.direction]
 
-                # ou parar o Pac-Man
-                else:
-                    self.set_position()
-                    self.direction = game_config.Movements.STOP
+                    # ou parar o Pac-Man
+                    else:
+                        self.set_position()
+                        self.direction = game_config.Movements.STOP
+                except:
+                    pass
 
     def overshot_target(self):
         """
