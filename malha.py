@@ -29,8 +29,8 @@ class Node(object):
             if self.neighbors[n] is not None:
                 line_start = self.position.asTuple()
                 line_end = self.neighbors[n].position.asTuple()
-                pygame.draw.line(screen, game_config.Colors.tumbleweed, line_start, line_end, 4)
-                pygame.draw.circle(screen, game_config.Colors.red, self.position.asInt(), 12)
+                # pygame.draw.line(screen, game_config.Colors.tumbleweed, line_start, line_end, 4)
+                # pygame.draw.circle(screen, game_config.Colors.red, self.position.asInt(), 12)
 
 
 class NodeGroup(object):
