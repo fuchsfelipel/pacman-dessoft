@@ -70,7 +70,8 @@ class GameScreen:
         Este método serve apenas para renderizar os nossos objetos na GUI
         """
         # Vamos apagar a tela
-        self.window.blit(self.background, (0, 0))
+        # Background
+        self.window.blit(pygame.image.load("assets/tabuleiro.png"), (0, 0))
 
         # E agora renderizar o jogo
         self.nodes.render(self.window)
