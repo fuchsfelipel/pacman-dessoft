@@ -5,8 +5,15 @@ from game_config import *
 
 
 class PointBall(object):
+    """
+    Esta classe implementa as bolinhas de pontuação do jogo.
+    Sua lógica e estrutra foi copiada do tutorial PacManCode
+    porém houve refatorações e otimizações significativas.
+    Mudanças pontuais de lógica e regras de negócio também
+    ocorreram
+    """
     def __init__(self, x, y):
-        self.name = "pellet"
+        self.name = "point_ball"
         self.position = Vector2(x, y)
         self.color = game_config.Colors.tumbleweed
         self.radius = 4
@@ -19,10 +26,10 @@ class PointBall(object):
             pygame.draw.circle(screen, self.color, p, self.radius)
 
 
-class PowerPointBall(PointBall):
+class SuperPointBall(PointBall):
     def __init__(self, x, y):
         PointBall.__init__(self, x, y)
-        self.name = "powerpellet"
+        self.name = "super_point_ball"
         self.radius = 8
         self.points = 50
         self.flashTime = 0.2
@@ -35,42 +42,40 @@ class PowerPointBall(PointBall):
             self.timer = 0
 
 
-class PelletGroup(object):
-    def __init__(self, pelletfile):
-        self.pelletList = []
-        self.powerpellets = []
-        # self.pelletSymbols = ["p", "n", "Y"]
-        # self.powerpelletSymbols = ["P", "N"]
-        self.createPelletList(pelletfile)
+class PointBallGroup(object):
+    def __init__(self, point_balls_file):
+        self.point_balls_list = []
+        self.super_point_balls = []
+        self.create_point_balls_list(point_balls_file)
 
     def update(self, dt):
-        for powerpellet in self.powerpellets:
-            powerpellet.update(dt)
+        for super_point_balls in self.super_point_balls:
+            super_point_balls.update(dt)
 
-    def createPelletList(self, pelletfile):
-        grid = self.readPelletfile(pelletfile)
+    def create_point_balls_list(self, point_balls_file):
+        grid = self.read_point_balls_file(point_balls_file)
         rows = len(grid)
         cols = len(grid[0])
         for row in range(rows):
             for col in range(cols):
                 if grid[row][col] == 'p':
-                    self.pelletList.append(PointBall(col * game_config.GameDimensions.tile_w, row * game_config.GameDimensions.tile_h))
+                    self.point_balls_list.append(PointBall(col * game_config.GameDimensions.tile_w, row * game_config.GameDimensions.tile_h))
                 elif grid[row][col] == 'P':
-                    pp = PowerPointBall(col * game_config.GameDimensions.tile_w, row * game_config.GameDimensions.tile_h)
-                    self.pelletList.append(pp)
-                    self.powerpellets.append(pp)
+                    pp = SuperPointBall(col * game_config.GameDimensions.tile_w, row * game_config.GameDimensions.tile_h)
+                    self.point_balls_list.append(pp)
+                    self.super_point_balls.append(pp)
 
-    def readPelletfile(self, textfile):
-        f = open(textfile, "r")
+    def read_point_balls_file(self, point_balls_file):
+        f = open(point_balls_file, "r")
         lines = [line.rstrip('\n') for line in f]
         lines = [line.rstrip('\r') for line in lines]
         return [line.split(' ') for line in lines]
 
-    def isEmpty(self):
-        if len(self.pelletList) == 0:
+    def is_empty(self):
+        if len(self.point_balls_list) == 0:
             return True
         return False
 
     def render(self, screen):
-        for pellet in self.pelletList:
-            pellet.render(screen)
+        for point_ball in self.point_balls_list:
+            point_ball.render(screen)
