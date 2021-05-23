@@ -22,6 +22,9 @@ class GameScreen:
         # Detalhes Básicos
         self.window = window
 
+        self.background = pygame.surface.Surface(game_config.GameDimensions.screen_size).convert()
+        self.background.fill(game_config.Colors.black)
+
         # Mapa & Ambiente
         self.clock = pygame.time.Clock()  # Define um relógio de jogo que será usado para a movimentação de sprites.
         self.nodes = NodeGroup("assets/tabuleiro.txt")
@@ -62,6 +65,10 @@ class GameScreen:
         """
         Este método serve apenas para renderizar os nossos objetos na GUI
         """
+        # Vamos apagar a tela
+        self.window.blit(self.background, (0, 0))
+
+        # E agora renderizar o jogo
         self.nodes.render(self.window)
         self.pellets.render(self.window)
         self.pacman.render(self.window)
