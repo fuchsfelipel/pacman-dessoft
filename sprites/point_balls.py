@@ -3,39 +3,71 @@ import pygame
 import game_config
 from game_config import *
 
+"""
+Este módulo implementa as bolinhas de pontuação do jogo.
+Sua lógica e estrutra foi copiada do tutorial PacManCode
+porém houve refatorações e otimizações significativas.
+Mudanças pontuais de lógica e regras de negócio também
+ocorreram
+"""
+
 
 class PointBall(object):
     """
-    Esta classe implementa as bolinhas de pontuação do jogo.
-    Sua lógica e estrutra foi copiada do tutorial PacManCode
-    porém houve refatorações e otimizações significativas.
-    Mudanças pontuais de lógica e regras de negócio também
-    ocorreram
+    Esta classe implemente um template para as point_balls
     """
     def __init__(self, x, y):
+        """
+        Instancia uma nova point_ball
+        :param x: Posição em X
+        :param y: Posicão em Y
+        """
+        # Dados básicos
         self.name = "point_ball"
-        self.position = Vector2(x, y)
         self.color = game_config.Colors.tumbleweed
         self.radius = 4
-        self.points = 10
+        self.points = game_config.Points.point_balls
+
+        # Dados de Posicionamenteo
+        self.position = Vector2(x, y)
         self.visible = True
 
     def render(self, screen):
+        """
+        Renderiza a point_ball na tela.
+        :param screen: Tela do PyGame
+        """
         if self.visible:
-            p = self.position.asInt()
-            pygame.draw.circle(screen, self.color, p, self.radius)
+            pygame.draw.circle(screen, self.color, self.position.asInt(), self.radius)
 
 
 class SuperPointBall(PointBall):
+    """
+    Esta classe cria as point_balls com super poderes
+    """
     def __init__(self, x, y):
+        """
+        Inicializa uma nova SuperPointBall
+        :param x: Posição em X
+        :param y: Posição em Y
+        """
+        # Uma SuperPointBall não deixa de ser uma PointBall
+        # então vamos instanciar uma PointBall normal
         PointBall.__init__(self, x, y)
+
+        # Dados básicos
         self.name = "super_point_ball"
         self.radius = 8
-        self.points = 50
+        self.points = game_config.Points.super_point_balls
         self.flashTime = 0.2
         self.timer = 0
 
     def update(self, dt):
+        """
+        Atualiza a SuperPointBall --> Ou seja, faz ela piscar.
+        :param dt:
+        :return:
+        """
         self.timer += dt
         if self.timer >= self.flashTime:
             self.visible = not self.visible

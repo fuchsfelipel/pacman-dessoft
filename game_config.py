@@ -72,3 +72,4 @@ class Points:
     """
     point_balls = 10
     pacman_lives = 3  # o Pac-Man vai começar com 3 vidas
+    super_point_balls = 50
