@@ -7,6 +7,7 @@ import screens.game
 import screens.home
 import screens.highscore
 import screens.gameover
+
 # Setup do PyGame
 pygame.init()
 window = pygame.display.set_mode(game_config.GameDimensions.screen_size, 0, 32)
