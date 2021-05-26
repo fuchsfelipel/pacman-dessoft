@@ -17,6 +17,7 @@ class GameDimensions:
 
 # Cores: https://www.schemecolor.com/pac-man-game-colors.php
 class Colors:
+    # Google ´nome da cor hex
     """"Paleta de cores do jogo"""
     green = "#00FF00"
     red = "#FD0000"
