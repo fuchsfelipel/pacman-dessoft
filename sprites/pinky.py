@@ -100,6 +100,7 @@ class Pinky:
             else:
                 self.set_position()
                 self.direction = game_config.Movements.STOP
+                self.direction = utils.movement_translator.movement_ghosts(random.randint(0,3))
 
     def move_by_key(self, direction):
         """
@@ -143,6 +144,7 @@ class Pinky:
                     else:
                         self.set_position()
                         self.direction = game_config.Movements.STOP
+
                 except:
                     pass
 

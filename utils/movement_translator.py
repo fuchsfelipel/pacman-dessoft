@@ -14,12 +14,12 @@ def movement_translator(key):
     return None
 
 def movement_ghosts(key):
-    if 0:
+    if key == 0:
         return game_config.Movements.UP
-    elif 1:
+    elif key == 1:
         return game_config.Movements.DOWN
-    elif 2:
+    elif key == 2:
         return game_config.Movements.LEFT
-    elif 3:
+    elif key == 3:
         return game_config.Movements.RIGHT
     return None
