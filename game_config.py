@@ -19,9 +19,10 @@ class GameDimensions:
 class Colors:
     # Google ´nome da cor hex
     """"Paleta de cores do jogo"""
-    green = "#00FF00"
+    brown= "#964B00" #Clyde
+    green = "#00FF00" 
     red = "#FD0000" #Blink
-    tumbleweed = "#DEA185" #Clyde
+    tumbleweed = "#DEA185" 
     bluebonnet = "#2121DE"
     neonBlue = "#1919A6" #Inky
     yellow = "#FFFF00" #Pac-Man
