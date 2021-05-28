@@ -9,9 +9,9 @@ import game_config
 import utils.movement_translator
 
 
-class Pinky:
+class Blinky:
     """
-    Esta classe define o Pinky.
+    Esta classe define o Blinky.
     Em grande parte, sua lógica deve-se ao tutorial pacmancode
     Dito isso, existe uma boa quantidade de código original ou refatorado/otimizado
     Mudanças pontuais de lógica e regras de negócio também ocorreram
@@ -23,10 +23,10 @@ class Pinky:
         :param nodes: Nós da malha de movimentação
         """
         # Dados básicos do Pac-Man
-        self.name = "pinky"
+        self.name = "blinky"
         self.collideRadius = 5
         self.radius = 10
-        self.color = game_config.Colors.pink
+        self.color = game_config.Colors.red
 
         # Loading do ambiente
         self.nodes = nodes

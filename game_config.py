@@ -20,13 +20,13 @@ class Colors:
     # Google ´nome da cor hex
     """"Paleta de cores do jogo"""
     green = "#00FF00"
-    red = "#FD0000"
-    tumbleweed = "#DEA185"
+    red = "#FD0000" #Blink
+    tumbleweed = "#DEA185" #Clyde
     bluebonnet = "#2121DE"
-    neonBlue = "#1919A6"
-    yellow = "#FFFF00"
+    neonBlue = "#1919A6" #Inky
+    yellow = "#FFFF00" #Pac-Man
     black = "#000000"
-
+    pink = "#FF007F" #Pinky
 
 class GameStatus:
     """Status possíveis para o jogo"""

@@ -6,6 +6,7 @@ from pygame.locals import *
 import game_config
 from sprites.pacman import Pacman
 from sprites.pinky import Pinky
+from sprites.blinky import Blinky
 from malha import NodeGroup
 from sprites.point_balls import PointBallGroup
 
@@ -34,7 +35,7 @@ class GameScreen:
         self.pellets = PointBallGroup("assets/bolinhas.txt")
         self.pacman = Pacman(self.nodes)
         self.pinky = Pinky(self.nodes)
-
+        self.blinky = Blinky(self.nodes)
         # Musica
         music = pygame.mixer.music.load('assets/home_track.ogg')
         pygame.mixer.music.play(1)
@@ -51,6 +52,7 @@ class GameScreen:
         # Agora vamos propagar a mudança de tempo nos sprites
         self.pacman.update(dt)
         self.pinky.update(dt)
+        self.blinky.update(dt)
         self.pellets.update(dt)
         self.check_point_ball_events()
 
@@ -81,5 +83,5 @@ class GameScreen:
         self.pellets.render(self.window)
         self.pacman.render(self.window)
         self.pinky.render(self.window)
-
+        self.blinky.render(self.window)
         pygame.display.update()
