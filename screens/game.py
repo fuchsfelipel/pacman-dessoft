@@ -82,7 +82,7 @@ class GameScreen:
         """
         # Vamos apagar a tela
         # Background
-        self.window.blit(pygame.image.load("assets/tabuleiro.png"), (150, 150))
+        self.window.blit(pygame.image.load("assets/tabuleiro.png"), (0, 0))
 
         # E agora renderizar o jogo
         self.nodes.render(self.window)
