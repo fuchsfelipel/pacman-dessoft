@@ -7,6 +7,7 @@ import game_config
 from sprites.pacman import Pacman
 from sprites.pinky import Pinky
 from sprites.blinky import Blinky
+from sprites.inky import Inky
 from malha import NodeGroup
 from sprites.point_balls import PointBallGroup
 
@@ -36,6 +37,7 @@ class GameScreen:
         self.pacman = Pacman(self.nodes)
         self.pinky = Pinky(self.nodes)
         self.blinky = Blinky(self.nodes)
+        self.inky = Inky(self.nodes)
         # Musica
         music = pygame.mixer.music.load('assets/home_track.ogg')
         pygame.mixer.music.play(1)
@@ -53,6 +55,7 @@ class GameScreen:
         self.pacman.update(dt)
         self.pinky.update(dt)
         self.blinky.update(dt)
+        self.inky.update(dt)
         self.pellets.update(dt)
         self.check_point_ball_events()
 
@@ -84,4 +87,5 @@ class GameScreen:
         self.pacman.render(self.window)
         self.pinky.render(self.window)
         self.blinky.render(self.window)
+        self.inky.render(self.window)
         pygame.display.update()
