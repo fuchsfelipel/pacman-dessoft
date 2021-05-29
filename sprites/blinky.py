@@ -30,7 +30,7 @@ class Blinky:
 
         # Loading do ambiente
         self.nodes = nodes
-        self.node = nodes.node_list[0]
+        self.node = nodes.node_list[54]
 
         # Dados de movimentação
         self.direction = game_config.Movements.STOP
@@ -72,8 +72,9 @@ class Blinky:
 
         # Verificar a nova direção do Pac-Man
         self.tempDt += dt
-        if (self.tempDt % 5000):
+        if (self.tempDt % 1000):
             direction = utils.movement_translator.movement_ghosts(random.randint(0,3))
+            
             self.tempDt = 0
 
         # Se houver nova direção --> iniciar novo movimento

@@ -30,7 +30,7 @@ class Pinky:
 
         # Loading do ambiente
         self.nodes = nodes
-        self.node = nodes.node_list[0]
+        self.node = nodes.node_list[54]
 
         # Dados de movimentação
         self.direction = game_config.Movements.STOP
@@ -90,13 +90,14 @@ class Pinky:
         """
         if (self.direction is not game_config.Movements.STOP) and self.overshot_target():
             self.node = self.target
-
+            
             # Bati em um portal?
             self.portal()
 
             # Será que o Pac-Man bateu com o nariz na parede?
             if self.node.neighbors[self.direction] is not None:
                 self.target = self.node.neighbors[self.direction]
+                self.direction = utils.movement_translator.movement_ghosts(random.randint(0,3))
             else:
                 self.set_position()
                 self.direction = game_config.Movements.STOP
@@ -111,17 +112,17 @@ class Pinky:
         if (self.direction is game_config.Movements.STOP) and (self.node.neighbors[direction] is not None):
             self.target = self.node.neighbors[direction]
             self.direction = direction
-
+           
         # Toda reversão de direção é permitida, pois é impossível colidir com a parede.
         elif direction == self.direction * -1:
             self.reverse_direction()
-
+            
         # Se o Pac-Man passou do alvo definido
         elif self.overshot_target():
             # Vamos redefinir sua posição atual para a meta estabelecida
             # na ultima iteração
             self.node = self.target
-
+            
             # Pode ser que ele passou do ponto por causa de um portal
             self.portal()
 

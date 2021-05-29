@@ -192,4 +192,5 @@ class Pacman(object):
         :param screen: Tela do PyGame
         """
         # Desenha um círculo na tela
+        
         pygame.draw.circle(screen, self.color, self.position.asInt(), self.radius)

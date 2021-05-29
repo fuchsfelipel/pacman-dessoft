@@ -30,7 +30,7 @@ class Clyde:
 
         # Loading do ambiente
         self.nodes = nodes
-        self.node = nodes.node_list[0]
+        self.node = nodes.node_list[54]
 
         # Dados de movimentação
         self.direction = game_config.Movements.STOP
