@@ -5,6 +5,10 @@ from pygame.locals import *
 # Módulos DIY
 import game_config
 from sprites.pacman import Pacman
+from sprites.pinky import Pinky
+from sprites.blinky import Blinky
+from sprites.inky import Inky
+from sprites.clyde import Clyde
 from malha import NodeGroup
 from sprites.point_balls import PointBallGroup
 
@@ -32,7 +36,10 @@ class GameScreen:
         # Sprites
         self.pellets = PointBallGroup("assets/bolinhas.txt")
         self.pacman = Pacman(self.nodes)
-
+        self.pinky = Pinky(self.nodes)
+        self.blinky = Blinky(self.nodes)
+        self.inky = Inky(self.nodes)
+        self.clyde = Clyde(self.nodes)
         # Musica
         music = pygame.mixer.music.load('assets/home_track.ogg')
         pygame.mixer.music.play(1)
@@ -48,6 +55,10 @@ class GameScreen:
 
         # Agora vamos propagar a mudança de tempo nos sprites
         self.pacman.update(dt)
+        self.pinky.update(dt)
+        self.blinky.update(dt)
+        self.inky.update(dt)
+        self.clyde.update(dt)
         self.pellets.update(dt)
         self.check_point_ball_events()
 
@@ -65,6 +76,8 @@ class GameScreen:
         if point_ball:
             self.pellets.point_balls_list.remove(point_ball)
 
+   
+
     def render(self):
         """
         Este método serve apenas para renderizar os nossos objetos na GUI
@@ -76,5 +89,9 @@ class GameScreen:
         # E agora renderizar o jogo
         self.nodes.render(self.window)
         self.pellets.render(self.window)
-        self.pacman.render(self.window)
+        self.pacman.render(self.window,self.pinky,self.clyde,self.blinky,self.inky)
+        self.pinky.render(self.window)
+        self.blinky.render(self.window)
+        self.inky.render(self.window)
+        self.clyde.render(self.window)
         pygame.display.update()

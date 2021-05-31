@@ -1,7 +1,7 @@
 # --- Imports ---
 # PyGame
 import time
-
+import random
 import pygame
 
 # Módulo DIY
@@ -9,9 +9,9 @@ import game_config
 import utils.movement_translator
 
 
-class Pacman(object):
+class Clyde:
     """
-    Esta classe define o Pac-Man.
+    Esta classe define o Clyde.
     Em grande parte, sua lógica deve-se ao tutorial pacmancode
     Dito isso, existe uma boa quantidade de código original ou refatorado/otimizado
     Mudanças pontuais de lógica e regras de negócio também ocorreram
@@ -23,17 +23,18 @@ class Pacman(object):
         :param nodes: Nós da malha de movimentação
         """
         # Dados básicos do Pac-Man
-        self.name = "pacman"
+        self.name = "clyde"
         self.collideRadius = 5
         self.radius = 10
-        self.color = game_config.Colors.yellow
+        self.color = game_config.Colors.brown
 
         # Loading do ambiente
         self.nodes = nodes
-        self.node = nodes.node_list[0]
+        self.node = nodes.node_list[54]
 
         # Dados de movimentação
-        self.direction = game_config.Movements.STOP
+        self.direction = utils.movement_translator.movement_ghosts(random.randint(0,3))
+        #game_config.Movements.STOP
         self.speed = 100
         self.position = self.node.position.copy()
         self.target = self.node
@@ -59,6 +60,8 @@ class Pacman(object):
             self.node = self.node.portal_node
             self.set_position()
 
+    tempDt = 0
+    
     def update(self, dt):
         """
         Este é o método que precisa ser invocado pelo loop de jogo.
@@ -69,11 +72,16 @@ class Pacman(object):
         self.position += self.direction * self.speed * dt
 
         # Verificar a nova direção do Pac-Man
-        direction = utils.movement_translator.movement_translator(pygame.key.get_pressed())
+        self.tempDt += dt
+        #if (self.tempDt % 1000):
+         #   direction = utils.movement_translator.movement_ghosts(random.randint(0,3))
+            
+          #  self.tempDt = 0
 
         # Se houver nova direção --> iniciar novo movimento
-        if direction:
-            self.move_by_key(direction)
+        
+        if self.direction:
+            self.move_by_key(self.direction)
 
         # Ou continuar o último...
         else:
@@ -94,7 +102,8 @@ class Pacman(object):
                 self.target = self.node.neighbors[self.direction]
             else:
                 self.set_position()
-                self.direction = game_config.Movements.STOP
+               # self.direction = game_config.Movements.STOP
+                self.direction = utils.movement_translator.movement_ghosts(random.randint(0,3))
 
     def move_by_key(self, direction):
         """
@@ -102,6 +111,7 @@ class Pacman(object):
         (Ou seja, muda de direção)
         """
         # Se o Pac-Man estiver parado
+        
         if (self.direction is game_config.Movements.STOP) and (self.node.neighbors[direction] is not None):
             self.target = self.node.neighbors[direction]
             self.direction = direction
@@ -137,7 +147,8 @@ class Pacman(object):
                     # ou parar o Pac-Man
                     else:
                         self.set_position()
-                        self.direction = game_config.Movements.STOP
+                        self.direction = utils.movement_translator.movement_ghosts(random.randint(0,3))
+
                 except:
                     pass
 
@@ -186,19 +197,10 @@ class Pacman(object):
         pygame.mixer.music.stop()
         return None
 
-    def render(self, screen, pinky,clyde,blinky,inky):
+    def render(self, screen):
         """
         (Re)desenha o Pac-Man na tela com os dados atualizados.
         :param screen: Tela do PyGame
         """
         # Desenha um círculo na tela
-        if pinky.position == self.position:
-            print('game_over')
-        if clyde.position == self.position:
-            print('game_over')
-        if blinky.position == self.position:
-            print('game_over')
-        if inky.position == self.position:
-            print('game_over')
-            
         pygame.draw.circle(screen, self.color, self.position.asInt(), self.radius)
