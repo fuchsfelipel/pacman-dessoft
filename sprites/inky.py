@@ -26,6 +26,7 @@ class Inky:
         self.name = "inky"
         self.collideRadius = 5
         self.radius = 10
+        self.defaultcolor = game_config.Colors.neonBlue
         self.color = game_config.Colors.neonBlue
 
         # Loading do ambiente

@@ -26,6 +26,7 @@ class Pinky:
         self.name = "pinky"
         self.collideRadius = 5
         self.radius = 10
+        self.defaultcolor = game_config.Colors.pink
         self.color = game_config.Colors.pink
 
         # Loading do ambiente

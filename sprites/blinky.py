@@ -26,6 +26,7 @@ class Blinky:
         self.name = "blinky"
         self.collideRadius = 5
         self.radius = 10
+        self.defaultcolor = game_config.Colors.red
         self.color = game_config.Colors.red
 
         # Loading do ambiente

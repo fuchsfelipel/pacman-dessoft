@@ -26,6 +26,7 @@ class Clyde:
         self.name = "clyde"
         self.collideRadius = 5
         self.radius = 10
+        self.defaultcolor = game_config.Colors.brown
         self.color = game_config.Colors.brown
 
         # Loading do ambiente
