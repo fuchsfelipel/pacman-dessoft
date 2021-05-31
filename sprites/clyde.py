@@ -26,6 +26,7 @@ class Clyde:
         self.name = "clyde"
         self.collideRadius = 5
         self.radius = 10
+        self.defaultcolor = game_config.Colors.brown
         self.color = game_config.Colors.brown
 
         # Loading do ambiente
@@ -179,6 +180,11 @@ class Clyde:
 
         # Vamos inverter o alvo
         self.node, self.target = self.target, self.node
+
+
+    def be_eaten(self):
+        self.node = self.nodes.node_list[0]
+        self.set_position()
 
     def eat_point_balls(self, point_list):
         """

@@ -7,6 +7,7 @@ import pygame
 # Módulo DIY
 import game_config
 import utils.movement_translator
+from sprites import inky, blinky, pinky, clyde
 
 
 class Pacman(object):
@@ -27,6 +28,9 @@ class Pacman(object):
         self.collideRadius = 5
         self.radius = 10
         self.color = game_config.Colors.yellow
+
+        # Por padrão o Pac-Man é comido por fantasmas
+        self.mode = game_config.PacManStatus.Victim
 
         # Loading do ambiente
         self.nodes = nodes
@@ -169,7 +173,7 @@ class Pacman(object):
         # Vamos inverter o alvo
         self.node, self.target = self.target, self.node
 
-    def eat_point_balls(self, point_list):
+    def eat_point_balls(self, point_list, superpoint_list, ghosts):
         """
         Este método faz com que o Pac-Man coma bolinhas
         :param point_list:
@@ -180,11 +184,31 @@ class Pacman(object):
                 # Soma os pontos ao placar atual
                 self.points += game_config.Points.point_balls
 
+                if (ball in superpoint_list):
+                    self.mode = game_config.PacManStatus.Assassin
+                    for ghost in ghosts:
+                        ghost.color = "navy"
 
                 return ball
 
         pygame.mixer.music.stop()
         return None
+
+    def collide_with_ghost(self, ghosts):
+        """
+        Este método faz com que o Pac-Man morra ao tocar em um fantasma
+        :param point_list:
+        """
+        for ghost in ghosts:
+            # Se de fato o Pac-Man colidiu com o ponto
+            if (self.position - ghost.position).magnitudeSquared() <= (ghost.radius + self.collideRadius) ** 2:
+                # PacMan morre
+                if self.mode == game_config.PacManStatus.Victim:
+                    self.node = self.nodes.node_list[0]
+                    self.set_position()
+
+                else:
+                    ghost.be_eaten()
 
     def render(self, screen, pinky,clyde,blinky,inky):
         """
@@ -192,13 +216,4 @@ class Pacman(object):
         :param screen: Tela do PyGame
         """
         # Desenha um círculo na tela
-        if pinky.position == self.position:
-            print('game_over')
-        if clyde.position == self.position:
-            print('game_over')
-        if blinky.position == self.position:
-            print('game_over')
-        if inky.position == self.position:
-            print('game_over')
-            
         pygame.draw.circle(screen, self.color, self.position.asInt(), self.radius)

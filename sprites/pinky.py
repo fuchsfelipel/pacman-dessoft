@@ -26,6 +26,7 @@ class Pinky:
         self.name = "pinky"
         self.collideRadius = 5
         self.radius = 10
+        self.defaultcolor = game_config.Colors.pink
         self.color = game_config.Colors.pink
 
         # Loading do ambiente
@@ -195,6 +196,10 @@ class Pinky:
 
         pygame.mixer.music.stop()
         return None
+
+    def be_eaten(self):
+        self.node = self.nodes.node_list[0]
+        self.set_position()
 
     def render(self, screen):
         """
