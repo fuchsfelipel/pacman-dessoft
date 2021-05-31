@@ -76,6 +76,8 @@ class GameScreen:
         if point_ball:
             self.pellets.point_balls_list.remove(point_ball)
 
+   
+
     def render(self):
         """
         Este método serve apenas para renderizar os nossos objetos na GUI
@@ -87,7 +89,7 @@ class GameScreen:
         # E agora renderizar o jogo
         self.nodes.render(self.window)
         self.pellets.render(self.window)
-        self.pacman.render(self.window)
+        self.pacman.render(self.window,self.pinky,self.clyde,self.blinky,self.inky)
         self.pinky.render(self.window)
         self.blinky.render(self.window)
         self.inky.render(self.window)

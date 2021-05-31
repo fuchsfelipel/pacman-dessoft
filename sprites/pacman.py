@@ -186,12 +186,19 @@ class Pacman(object):
         pygame.mixer.music.stop()
         return None
 
-    def render(self, screen):
+    def render(self, screen, pinky,clyde,blinky,inky):
         """
         (Re)desenha o Pac-Man na tela com os dados atualizados.
         :param screen: Tela do PyGame
         """
         # Desenha um círculo na tela
-        # for posição in Pinky(self.position):
-        #     if Pinky(self.position)!= Pacman(self.position):
+        if pinky.position == self.position:
+            print('game_over')
+        if clyde.position == self.position:
+            print('game_over')
+        if blinky.position == self.position:
+            print('game_over')
+        if inky.position == self.position:
+            print('game_over')
+            
         pygame.draw.circle(screen, self.color, self.position.asInt(), self.radius)

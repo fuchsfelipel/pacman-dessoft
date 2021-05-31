@@ -111,7 +111,7 @@ class Blinky:
         (Ou seja, muda de direção)
         """
         # Se o Pac-Man estiver parado
-        print(self.node.neighbors)
+        
         if (self.direction is game_config.Movements.STOP) and (self.node.neighbors[direction] is not None):
             self.target = self.node.neighbors[direction]
             self.direction = direction
