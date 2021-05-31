@@ -33,7 +33,8 @@ class Pinky:
         self.node = nodes.node_list[54]
 
         # Dados de movimentação
-        self.direction = game_config.Movements.STOP
+        self.direction = utils.movement_translator.movement_ghosts(random.randint(0,3))
+        #game_config.Movements.STOP
         self.speed = 100
         self.position = self.node.position.copy()
         self.target = self.node
@@ -72,13 +73,15 @@ class Pinky:
 
         # Verificar a nova direção do Pac-Man
         self.tempDt += dt
-        if (self.tempDt % 5000):
-            direction = utils.movement_translator.movement_ghosts(random.randint(0,3))
-            self.tempDt = 0
+        #if (self.tempDt % 1000):
+         #   direction = utils.movement_translator.movement_ghosts(random.randint(0,3))
+            
+          #  self.tempDt = 0
 
         # Se houver nova direção --> iniciar novo movimento
-        if direction:
-            self.move_by_key(direction)
+        
+        if self.direction:
+            self.move_by_key(self.direction)
 
         # Ou continuar o último...
         else:
@@ -90,17 +93,16 @@ class Pinky:
         """
         if (self.direction is not game_config.Movements.STOP) and self.overshot_target():
             self.node = self.target
-            
+
             # Bati em um portal?
             self.portal()
 
             # Será que o Pac-Man bateu com o nariz na parede?
             if self.node.neighbors[self.direction] is not None:
                 self.target = self.node.neighbors[self.direction]
-                self.direction = utils.movement_translator.movement_ghosts(random.randint(0,3))
             else:
                 self.set_position()
-                self.direction = game_config.Movements.STOP
+               # self.direction = game_config.Movements.STOP
                 self.direction = utils.movement_translator.movement_ghosts(random.randint(0,3))
 
     def move_by_key(self, direction):
@@ -109,20 +111,21 @@ class Pinky:
         (Ou seja, muda de direção)
         """
         # Se o Pac-Man estiver parado
+        print(self.node.neighbors)
         if (self.direction is game_config.Movements.STOP) and (self.node.neighbors[direction] is not None):
             self.target = self.node.neighbors[direction]
             self.direction = direction
-           
+
         # Toda reversão de direção é permitida, pois é impossível colidir com a parede.
         elif direction == self.direction * -1:
             self.reverse_direction()
-            
+
         # Se o Pac-Man passou do alvo definido
         elif self.overshot_target():
             # Vamos redefinir sua posição atual para a meta estabelecida
             # na ultima iteração
             self.node = self.target
-            
+
             # Pode ser que ele passou do ponto por causa de um portal
             self.portal()
 
@@ -144,7 +147,7 @@ class Pinky:
                     # ou parar o Pac-Man
                     else:
                         self.set_position()
-                        self.direction = game_config.Movements.STOP
+                        self.direction = utils.movement_translator.movement_ghosts(random.randint(0,3))
 
                 except:
                     pass

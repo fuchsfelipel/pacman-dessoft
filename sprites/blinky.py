@@ -33,7 +33,8 @@ class Blinky:
         self.node = nodes.node_list[54]
 
         # Dados de movimentação
-        self.direction = game_config.Movements.STOP
+        self.direction = utils.movement_translator.movement_ghosts(random.randint(0,3))
+        #game_config.Movements.STOP
         self.speed = 100
         self.position = self.node.position.copy()
         self.target = self.node
@@ -72,14 +73,15 @@ class Blinky:
 
         # Verificar a nova direção do Pac-Man
         self.tempDt += dt
-        if (self.tempDt % 1000):
-            direction = utils.movement_translator.movement_ghosts(random.randint(0,3))
+        #if (self.tempDt % 1000):
+         #   direction = utils.movement_translator.movement_ghosts(random.randint(0,3))
             
-            self.tempDt = 0
+          #  self.tempDt = 0
 
         # Se houver nova direção --> iniciar novo movimento
-        if direction:
-            self.move_by_key(direction)
+        
+        if self.direction:
+            self.move_by_key(self.direction)
 
         # Ou continuar o último...
         else:
@@ -100,7 +102,7 @@ class Blinky:
                 self.target = self.node.neighbors[self.direction]
             else:
                 self.set_position()
-                self.direction = game_config.Movements.STOP
+               # self.direction = game_config.Movements.STOP
                 self.direction = utils.movement_translator.movement_ghosts(random.randint(0,3))
 
     def move_by_key(self, direction):
@@ -109,6 +111,7 @@ class Blinky:
         (Ou seja, muda de direção)
         """
         # Se o Pac-Man estiver parado
+        print(self.node.neighbors)
         if (self.direction is game_config.Movements.STOP) and (self.node.neighbors[direction] is not None):
             self.target = self.node.neighbors[direction]
             self.direction = direction
@@ -144,7 +147,7 @@ class Blinky:
                     # ou parar o Pac-Man
                     else:
                         self.set_position()
-                        self.direction = game_config.Movements.STOP
+                        self.direction = utils.movement_translator.movement_ghosts(random.randint(0,3))
 
                 except:
                     pass

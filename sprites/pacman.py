@@ -192,5 +192,6 @@ class Pacman(object):
         :param screen: Tela do PyGame
         """
         # Desenha um círculo na tela
-        
+        # for posição in Pinky(self.position):
+        #     if Pinky(self.position)!= Pacman(self.position):
         pygame.draw.circle(screen, self.color, self.position.asInt(), self.radius)
