@@ -9,7 +9,7 @@ class GameDimensions:
     fps = 30
     tile_h = 16
     row_num = 36
-    col_num = 28
+    col_num = 29
     screen_w = tile_w * col_num
     screen_h = tile_h * row_num
     screen_size = (screen_w, screen_h)
