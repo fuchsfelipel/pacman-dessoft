@@ -30,7 +30,7 @@ class Blinky:
 
         # Loading do ambiente
         self.nodes = nodes
-        self.node = nodes.node_list[54]
+        self.node = nodes.node_list[10]
 
         # Dados de movimentação
         self.direction = utils.movement_translator.movement_ghosts(random.randint(0,3))
