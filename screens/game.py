@@ -59,6 +59,8 @@ class GameScreen:
         self.blinky.update(dt)
         self.inky.update(dt)
         self.clyde.update(dt)
+        self.pacman.collide_with_ghost([self.pinky, self.inky,
+                                        self.clyde, self.blinky])
         self.pellets.update(dt)
         self.check_point_ball_events()
 

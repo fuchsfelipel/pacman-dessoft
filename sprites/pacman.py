@@ -7,6 +7,7 @@ import pygame
 # Módulo DIY
 import game_config
 import utils.movement_translator
+from sprites import inky, blinky, pinky, clyde
 
 
 class Pacman(object):
@@ -186,19 +187,22 @@ class Pacman(object):
         pygame.mixer.music.stop()
         return None
 
+    def collide_with_ghost(self, ghosts):
+        """
+        Este método faz com que o Pac-Man morra ao tocar em um fantasma
+        :param point_list:
+        """
+        for ghost in ghosts:
+            # Se de fato o Pac-Man colidiu com o ponto
+            if (self.position - ghost.position).magnitudeSquared() <= (ghost.radius + self.collideRadius) ** 2:
+                # Soma os pontos ao placar atual
+                self.node = self.nodes.node_list[0]
+                self.set_position()
+
     def render(self, screen, pinky,clyde,blinky,inky):
         """
         (Re)desenha o Pac-Man na tela com os dados atualizados.
         :param screen: Tela do PyGame
         """
         # Desenha um círculo na tela
-        if pinky.position == self.position:
-            print('game_over')
-        if clyde.position == self.position:
-            print('game_over')
-        if blinky.position == self.position:
-            print('game_over')
-        if inky.position == self.position:
-            print('game_over')
-            
         pygame.draw.circle(screen, self.color, self.position.asInt(), self.radius)
