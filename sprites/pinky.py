@@ -197,6 +197,10 @@ class Pinky:
         pygame.mixer.music.stop()
         return None
 
+    def be_eaten(self):
+        self.node = self.nodes.node_list[0]
+        self.set_position()
+
     def render(self, screen):
         """
         (Re)desenha o Pac-Man na tela com os dados atualizados.

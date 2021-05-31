@@ -181,6 +181,10 @@ class Blinky:
         # Vamos inverter o alvo
         self.node, self.target = self.target, self.node
 
+    def be_eaten(self):
+        self.node = self.nodes.node_list[0]
+        self.set_position()
+
     def eat_point_balls(self, point_list):
         """
         Este método faz com que o Pac-Man coma bolinhas

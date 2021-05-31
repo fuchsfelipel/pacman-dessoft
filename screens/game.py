@@ -40,6 +40,11 @@ class GameScreen:
         self.blinky = Blinky(self.nodes)
         self.inky = Inky(self.nodes)
         self.clyde = Clyde(self.nodes)
+        self.ghosts = [self.pinky, self.inky, self.clyde, self.blinky]
+
+        # Lógica do PacMan assassino
+        self.last_super_points = self.pellets.super_point_balls
+
         # Musica
         music = pygame.mixer.music.load('assets/home_track.ogg')
         pygame.mixer.music.play(1)
@@ -59,10 +64,10 @@ class GameScreen:
         self.blinky.update(dt)
         self.inky.update(dt)
         self.clyde.update(dt)
-        self.pacman.collide_with_ghost([self.pinky, self.inky,
-                                        self.clyde, self.blinky])
+        self.pacman.collide_with_ghost(self.ghosts)
         self.pellets.update(dt)
         self.check_point_ball_events()
+        self.check_pacman_mode()
 
         # Finalmente, vamos mostrar o objeto atualizado na tela
         self.render()
@@ -72,13 +77,27 @@ class GameScreen:
         Este método verifica os eventos com PointBalls e atualiza a nossa lista
         de PointBalls dentro da nossa instância do point_balls_list
         """
-        point_ball = self.pacman.eat_point_balls(self.pellets.point_balls_list)
+        point_ball = self.pacman.eat_point_balls(self.pellets.point_balls_list, self.pellets.super_point_balls,
+                                                 self.ghosts)
 
         # Será que precisamos remover alguma point_ball???
         if point_ball:
             self.pellets.point_balls_list.remove(point_ball)
 
-   
+    def check_pacman_mode(self):
+
+        # O self.clock % 12 define um tempo relativamente aleatório para quanto tempo
+        # o Pac-Man ficará assassino pois nunca saberemos o self.clock atual
+        # Ex. Pode ser que o modo dure 1 segundo ou 12
+        if pygame.time.get_ticks() % 1000 == 0:
+
+            self.reset_victim_pacman()
+
+    def reset_victim_pacman(self):
+       self.pacman.mode = game_config.PacManStatus.Victim
+
+       for ghost in self.ghosts:
+           ghost.color = ghost.defaultcolor
 
     def render(self):
         """

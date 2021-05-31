@@ -29,6 +29,9 @@ class Pacman(object):
         self.radius = 10
         self.color = game_config.Colors.yellow
 
+        # Por padrão o Pac-Man é comido por fantasmas
+        self.mode = game_config.PacManStatus.Victim
+
         # Loading do ambiente
         self.nodes = nodes
         self.node = nodes.node_list[0]
@@ -170,7 +173,7 @@ class Pacman(object):
         # Vamos inverter o alvo
         self.node, self.target = self.target, self.node
 
-    def eat_point_balls(self, point_list):
+    def eat_point_balls(self, point_list, superpoint_list, ghosts):
         """
         Este método faz com que o Pac-Man coma bolinhas
         :param point_list:
@@ -181,6 +184,10 @@ class Pacman(object):
                 # Soma os pontos ao placar atual
                 self.points += game_config.Points.point_balls
 
+                if (ball in superpoint_list):
+                    self.mode = game_config.PacManStatus.Assassin
+                    for ghost in ghosts:
+                        ghost.color = "navy"
 
                 return ball
 
@@ -195,9 +202,13 @@ class Pacman(object):
         for ghost in ghosts:
             # Se de fato o Pac-Man colidiu com o ponto
             if (self.position - ghost.position).magnitudeSquared() <= (ghost.radius + self.collideRadius) ** 2:
-                # Soma os pontos ao placar atual
-                self.node = self.nodes.node_list[0]
-                self.set_position()
+                # PacMan morre
+                if self.mode == game_config.PacManStatus.Victim:
+                    self.node = self.nodes.node_list[0]
+                    self.set_position()
+
+                else:
+                    ghost.be_eaten()
 
     def render(self, screen, pinky,clyde,blinky,inky):
         """
