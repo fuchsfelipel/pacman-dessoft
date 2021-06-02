@@ -1,4 +1,5 @@
 # PyGame
+from screens.gameover import GameOverScreen
 import pygame
 from pygame.locals import *
 
@@ -71,6 +72,7 @@ class GameScreen:
 
         # Finalmente, vamos mostrar o objeto atualizado na tela
         self.render()
+        
 
     def check_point_ball_events(self):
         """
@@ -83,6 +85,8 @@ class GameScreen:
         # Será que precisamos remover alguma point_ball???
         if point_ball:
             self.pellets.point_balls_list.remove(point_ball)
+            eatball = pygame.mixer.Sound("assets/barulinho_comer.ogg")
+            eatball.play()
 
     def check_pacman_mode(self):
 

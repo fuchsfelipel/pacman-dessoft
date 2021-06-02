@@ -1,5 +1,6 @@
 # --- Imports ---
 # PyGame
+import random
 import time
 
 import pygame
@@ -46,6 +47,10 @@ class Pacman(object):
         # Coisas de Placar
         self.points = 0
         self.lives = game_config.Points.pacman_lives
+
+        # Exibição das Vidas
+        self.livesh = game_config.GameDimensions.tile_h
+        self.livesr = game_config.GameDimensions.row_num
 
     def set_position(self):
         """
@@ -183,7 +188,6 @@ class Pacman(object):
             if (self.position - ball.position).magnitudeSquared() <= (ball.radius + self.collideRadius) ** 2:
                 # Soma os pontos ao placar atual
                 self.points += game_config.Points.point_balls
-
                 if (ball in superpoint_list):
                     self.mode = game_config.PacManStatus.Assassin
                     for ghost in ghosts:
@@ -204,16 +208,22 @@ class Pacman(object):
             if (self.position - ghost.position).magnitudeSquared() <= (ghost.radius + self.collideRadius) ** 2:
                 # PacMan morre
                 if self.mode == game_config.PacManStatus.Victim:
-                    self.node = self.nodes.node_list[0]
+                    self.node = self.nodes.node_list[random.choice([5, 15, 25, 35])]
                     self.set_position()
-
+                    self.lives -= 1
                 else:
                     ghost.be_eaten()
 
-    def render(self, screen, pinky,clyde,blinky,inky):
+    def render(self, screen, pinky, clyde, blinky, inky):
         """
         (Re)desenha o Pac-Man na tela com os dados atualizados.
         :param screen: Tela do PyGame
         """
         # Desenha um círculo na tela
         pygame.draw.circle(screen, self.color, self.position.asInt(), self.radius)
+
+        # Desenha as vidas na tela
+        for i in range(self.lives):
+            x = 5 + self.radius + (2 * self.radius + 5) * i
+            y = self.livesh * (self.livesr - 1)
+            pygame.draw.circle(screen, self.color, (x, y), self.radius)
