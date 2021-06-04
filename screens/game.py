@@ -79,7 +79,11 @@ class GameScreen:
 
         else:
             self.gOver.update()
-        
+
+            # Musica de Game Over
+            music = pygame.mixer.music.load('assets/gameover_SFX.mp3')
+            pygame.mixer.music.play(1)
+
     def check_point_ball_events(self):
         """
         Este método verifica os eventos com PointBalls e atualiza a nossa lista
