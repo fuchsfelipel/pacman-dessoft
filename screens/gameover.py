@@ -16,6 +16,10 @@ class GameOverScreen:
         self.window.blit(pygame.image.load("assets/gameover_screen.jpg"), (0, 0))
         pygame.display.flip()
 
+        # Musica
+        music = pygame.mixer.music.load('assets/gameover_SFX.mp3')
+        pygame.mixer.music.play(1)
+
         key = pygame.key.get_pressed()
         if key[pygame.K_c]:
             return game_config.GameStatus.game
@@ -24,11 +28,5 @@ class GameOverScreen:
             return game_config.GameStatus.highScore
 
         else:
-            return game_config.GameStatus.home
+            return game_config.GameStatus.gameOver
 
-        # if self.lives == -1:
-        #     # Musica
-        #     music = pygame.mixer.music.load('assets/gameover_SFX.mp3')
-        #     pygame.mixer.music.play(1)
-
-        #     return game_config.GameStatus.gameOver

@@ -1,5 +1,6 @@
 # --- Imports ---
 import pygame
+from pygame.constants import KEYDOWN
 
 import game_config
 
@@ -20,6 +21,7 @@ game = screens.game.GameScreen(window)
 home = screens.home.HomeScreen(window)
 gameover = screens.gameover.GameOverScreen(window)
 
+
 status = game_config.GameStatus.home
 while status != game_config.GameStatus.quit:
     # Ver se o usuário quer sair
@@ -28,11 +30,9 @@ while status != game_config.GameStatus.quit:
             status = game_config.GameStatus.quit
 
     if status == game_config.GameStatus.game:
-        if play == True:
-            game.update()
-        else:
-            status = game_config.GameStatus.quit
-        
+        game.update()
+        # if status == game_config.GameStatus.gameOver:
+        #     status == gameover.update()
     elif status == game_config.GameStatus.home:
         status = home.update()
 

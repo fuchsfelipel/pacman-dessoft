@@ -1,5 +1,5 @@
 # PyGame
-from screens.gameover import GameOverScreen
+from screens.gameover import *
 import pygame
 from pygame.locals import *
 
@@ -42,6 +42,8 @@ class GameScreen:
         self.inky = Inky(self.nodes)
         self.clyde = Clyde(self.nodes)
         self.ghosts = [self.pinky, self.inky, self.clyde, self.blinky]
+        self.gOver = GameOverScreen(window)
+        self.Over = False
 
         # Lógica do PacMan assassino
         self.last_super_points = self.pellets.super_point_balls
@@ -55,25 +57,29 @@ class GameScreen:
         Atualiza o status de todos os sprites
         """
 
+        if self.Over != True:
         # Aqui definimos um delta de tempo entre um update e outro.
         # Isso, na prática, se traduz ao número de Frames por Segundo (FPS)
-        dt = self.clock.tick(game_config.GameDimensions.fps) / 1000.0
+            dt = self.clock.tick(game_config.GameDimensions.fps) / 1000.0
 
-        # Agora vamos propagar a mudança de tempo nos sprites
-        self.pacman.update(dt)
-        self.pinky.update(dt)
-        self.blinky.update(dt)
-        self.inky.update(dt)
-        self.clyde.update(dt)
-        self.pacman.collide_with_ghost(self.ghosts)
-        self.pellets.update(dt)
-        self.check_point_ball_events()
-        self.check_pacman_mode()
+            # Agora vamos propagar a mudança de tempo nos sprites
+            self.pacman.update(dt)
+            self.pinky.update(dt)
+            self.blinky.update(dt)
+            self.inky.update(dt)
+            self.clyde.update(dt)
+            self.pacman.collide_with_ghost(self.ghosts)
+            self.pellets.update(dt)
+            self.check_point_ball_events()
+            self.check_pacman_mode()
+            self.Death()
 
-        # Finalmente, vamos mostrar o objeto atualizado na tela
-        self.render()
+            # Finalmente, vamos mostrar o objeto atualizado na tela
+            self.render()
+
+        else:
+            self.gOver.update()
         
-
     def check_point_ball_events(self):
         """
         Este método verifica os eventos com PointBalls e atualiza a nossa lista
@@ -102,6 +108,10 @@ class GameScreen:
 
        for ghost in self.ghosts:
            ghost.color = ghost.defaultcolor
+
+    def Death(self):
+        if self.pacman.lives == -1:
+            self.Over = True
 
     def render(self):
         """
