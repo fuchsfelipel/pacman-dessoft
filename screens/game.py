@@ -79,10 +79,13 @@ class GameScreen:
 
         else:
             self.gOver.update()
+            return self.music()
 
+    def music(self):
+        if self.Over != True:
             # Musica de Game Over
-            music = pygame.mixer.music.load('assets/gameover_SFX.mp3')
-            pygame.mixer.music.play(1)
+            music = pygame.mixer.music.load('assets/home_track.ogg')
+            pygame.mixer.music.play(1)            
 
     def check_point_ball_events(self):
         """
@@ -97,6 +100,7 @@ class GameScreen:
             self.pellets.point_balls_list.remove(point_ball)
             eatball = pygame.mixer.Sound("assets/barulinho_comer.ogg")
             eatball.play()
+
 
     def check_pacman_mode(self):
 
@@ -128,7 +132,7 @@ class GameScreen:
         # E agora renderizar o jogo
         self.nodes.render(self.window)
         self.pellets.render(self.window)
-        self.pacman.render(self.window,self.pinky,self.clyde,self.blinky,self.inky)
+        self.pacman.render(self.window)
         self.pinky.render(self.window)
         self.blinky.render(self.window)
         self.inky.render(self.window)

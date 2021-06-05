@@ -13,7 +13,7 @@ class GameDimensions:
     screen_w = tile_w * col_num
     screen_h = tile_h * row_num
     screen_size = (screen_w, screen_h)
-
+    screen_center = (screen_w // 2, screen_h // 2)
 
 # Cores: https://www.schemecolor.com/pac-man-game-colors.php
 class Colors:
@@ -76,6 +76,7 @@ class Points:
     point_balls = 10
     pacman_lives = 3  # o Pac-Man vai começar com 3 vidas
     super_point_balls = 50
+    ghost_point = 100
 
 class PacManStatus:
     Victim = 0

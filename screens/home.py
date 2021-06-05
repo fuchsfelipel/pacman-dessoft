@@ -7,7 +7,6 @@ import game_config
 # Outros
 import os
 
-
 class HomeScreen:
     def __init__(self, window):
         # Setup geral

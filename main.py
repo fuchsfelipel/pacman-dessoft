@@ -1,4 +1,5 @@
 # --- Imports ---
+from os import stat
 import pygame
 from pygame.constants import KEYDOWN
 
@@ -20,7 +21,7 @@ play = True
 game = screens.game.GameScreen(window)
 home = screens.home.HomeScreen(window)
 gameover = screens.gameover.GameOverScreen(window)
-
+highscore = screens.highscore.HighscoreScreen(window)
 
 status = game_config.GameStatus.home
 while status != game_config.GameStatus.quit:
@@ -31,8 +32,11 @@ while status != game_config.GameStatus.quit:
 
     if status == game_config.GameStatus.game:
         game.update()
-        # if status == game_config.GameStatus.gameOver:
-        #     status == gameover.update()
+
+    elif status == game_config.GameStatus.highScore:
+        status = highscore.update()
+
     elif status == game_config.GameStatus.home:
         status = home.update()
+
 
