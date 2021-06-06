@@ -47,7 +47,6 @@ class Pacman(object):
         # Coisas de Placar
         self.points = 0
         self.lives = game_config.Points.pacman_lives
-        self.file = open(str('score.json'), 'w+')
 
         # Exibição das Vidas
         self.livesh = game_config.GameDimensions.tile_h
@@ -225,14 +224,6 @@ class Pacman(object):
         """
         # Desenha um círculo na tela
         pygame.draw.circle(screen, self.color, self.position.asInt(), self.radius)
-        
-        x = 5 + self.radius + (2 * self.radius + 5) * 10
-        y = (self.livesh - 1) * self.livesr
-
-        white = (255, 255, 255)
-        font = pygame.font.SysFont(None, 48)
-        Hi = font.render('HI', True, white)
-        screen.blit(Hi, (x, y))
         
         # Desenha as vidas na tela
         for i in range(self.lives):

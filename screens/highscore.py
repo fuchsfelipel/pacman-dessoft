@@ -12,19 +12,6 @@ class HighscoreScreen:
         self.window = window
         
     def update(self):
-        with open('score.json', 'w+') as score:
-            hs = score.read()
-
-        
-
-        white = (255, 255, 255)
-
-        font = pygame.font.Font('freesansbold.ttf', 32)
-
-        text = font.render('High-Score', True, white)
-
-        center = game_config.GameDimensions.screen_center
-
         # Background
         self.window.blit(pygame.image.load("assets/highscore.png"), (0, 0))
         pygame.display.flip()
