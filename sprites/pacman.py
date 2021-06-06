@@ -88,6 +88,9 @@ class Pacman(object):
         else:
             self.move_by_self()
 
+    def resetPacman(self, nodes):
+        self.node = nodes.node_list[0]
+
     def move_by_self(self):
         """
         Este método faz com que o Pac-Man continue seu último movimento
@@ -194,9 +197,9 @@ class Pacman(object):
                     self.mode = game_config.PacManStatus.Assassin
                     for ghost in ghosts:
                         ghost.color = "navy"
-
                 return ball
-
+        if self.points == 5000:
+            self.lives += 1
         pygame.mixer.music.stop()
         return None
 

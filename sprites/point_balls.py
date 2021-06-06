@@ -86,6 +86,9 @@ class PointBallGroup(object):
         self.super_point_balls = []
         self.create_point_balls_list(point_balls_file)
 
+    def resetPointball(self, file):
+        self.create_point_balls_list(file)
+
     def update(self, dt):
         """
         Atualiza os status de todas as PointBalls.

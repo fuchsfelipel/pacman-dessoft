@@ -33,7 +33,9 @@ class GameScreen:
         # Mapa & Ambiente
         self.clock = pygame.time.Clock()  # Define um relógio de jogo que será usado para a movimentação de sprites.
         self.nodes = NodeGroup("assets/tabuleiro.txt")
-
+        self.level = 0
+        self.point_balls_eaten = 0
+        
         # Sprites
         self.pellets = PointBallGroup("assets/bolinhas.txt")
         self.pacman = Pacman(self.nodes)
@@ -81,6 +83,7 @@ class GameScreen:
             self.gOver.update()
             return self.music()
 
+
     def music(self):
         if self.Over != True:
             # Musica de Game Over
@@ -101,6 +104,19 @@ class GameScreen:
             eatball = pygame.mixer.Sound("assets/barulinho_comer.ogg")
             eatball.play()
 
+    def resetLevel(self):
+        Pacman.resetPacman(self.nodes)
+        PointBallGroup.resetPointball('assets/bolinhas.txt')
+        Blinky.resetBlinky(self.nodes)
+        Pinky.resetPinky(self.nodes)
+        Inky.resetInky(self.nodes)
+        Clyde.resetClyde(self.nodes)
+
+    def levelController(self):
+        if self.pellets.is_empty():
+            self.level += 1
+            self.resetLevel()
+            print(self.level)
 
     def check_pacman_mode(self):
 

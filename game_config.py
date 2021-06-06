@@ -68,7 +68,6 @@ class Movements:
         elif direction is Movements.RIGHT:
             return Movements.LEFT
 
-
 class Points:
     """
     Define os pontos de cada coisa
