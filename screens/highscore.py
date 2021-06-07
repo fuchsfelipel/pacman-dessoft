@@ -16,10 +16,6 @@ class HighscoreScreen:
         self.window.blit(pygame.image.load("assets/highscore.png"), (0, 0))
         pygame.display.flip()
 
-        self.window.blit(text, center)
-
-        pygame.display.update()
-
         key = pygame.key.get_pressed()
         if key[pygame.K_e]:
             return game_config.GameStatus.home

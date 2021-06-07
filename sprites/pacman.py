@@ -45,7 +45,7 @@ class Pacman(object):
         self.set_position()
 
         # Coisas de Placar
-        self.points = 0
+        self.points = 4500
         self.lives = game_config.Points.pacman_lives
 
         # Exibição das Vidas
@@ -200,6 +200,7 @@ class Pacman(object):
                 return ball
         if self.points == 5000:
             self.lives += 1
+            self.points = 0
         pygame.mixer.music.stop()
         return None
 
@@ -219,6 +220,7 @@ class Pacman(object):
                 else:
                     self.points += game_config.Points.ghost_point
                     ghost.be_eaten()
+ 
 
     def render(self, screen):
         """
@@ -228,6 +230,18 @@ class Pacman(object):
         # Desenha um círculo na tela
         pygame.draw.circle(screen, self.color, self.position.asInt(), self.radius)
         
+        # Escreve o Score na tela
+        x = 5 + self.radius + (2 * self.radius + 5) * 10
+        y = (self.livesh - 1) * self.livesr
+
+        white = (255, 255, 255)
+        font = pygame.font.SysFont(None, 40)
+        Hi = font.render('HI', True, white)
+        screen.blit(Hi, (x, y))
+
+        score = font.render(str(self.points), True, white)
+        screen.blit(score, (x + 60, y))
+
         # Desenha as vidas na tela
         for i in range(self.lives):
             x = 5 + self.radius + (2 * self.radius + 5) * i
