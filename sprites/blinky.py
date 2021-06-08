@@ -47,6 +47,10 @@ class Blinky:
 
     def resetBlinky(self, nodes):
         self.node = nodes.node_list[10]
+        self.speed += 0.5 * self.speed
+        self.set_position()
+        self.target = self.node
+        self.direction = utils.movement_translator.movement_ghosts(random.randint(0,3))
 
     def set_position(self):
         """
