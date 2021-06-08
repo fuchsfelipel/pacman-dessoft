@@ -11,7 +11,7 @@ import game_config
 import utils.movement_translator
 from sprites import inky, blinky, pinky, clyde
 
-class Pacman(object):
+class Pacman1(object):
     """
     Esta classe define o Pac-Man.
     Em grande parte, sua lógica deve-se ao tutorial pacmancode
@@ -28,7 +28,7 @@ class Pacman(object):
         self.name = "pacman"
         self.collideRadius = 5
         self.radius = 10
-        self.color = game_config.Colors.yellow
+        self.color = game_config.Colors.orange
 
         # Por padrão o Pac-Man é comido por fantasmas
         self.mode = game_config.PacManStatus.Victim
@@ -45,7 +45,7 @@ class Pacman(object):
         self.set_position()
 
         # Coisas de Placar
-        self.points = 4500
+        self.points = 0
         self.lives = game_config.Points.pacman_lives
 
         # Exibição das Vidas
@@ -241,16 +241,15 @@ class Pacman(object):
         pygame.draw.circle(screen, self.color, self.position.asInt(), self.radius)
         
         # Escreve o Score na tela
-        x = 5 + self.radius + (2 * self.radius + 5) * 10
-        y = (self.livesh - 1) * self.livesr
 
         white = (255, 255, 255)
         font = pygame.font.SysFont(None, 40)
         Hi = font.render('HI', True, white)
-        screen.blit(Hi, (x, y))
-
+        x = 5 + self.radius + (2 * self.radius + 5) * 4
+        y = (self.livesh - 1) * self.livesr
         score = font.render(str(self.points), True, white)
         screen.blit(score, (x + 60, y))
+        screen.blit(Hi, (x, y))
 
         # Desenha as vidas na tela
         for i in range(self.lives):

@@ -20,7 +20,8 @@ class Colors:
     # Google ´nome da cor hex
     """"Paleta de cores do jogo"""
     brown= "#964B00" #Clyde
-    green = "#00FF00" 
+    green = "#00FF00"
+    orange = '#FFA500'
     red = "#FD0000" #Blink
     tumbleweed = "#DEA185" 
     bluebonnet = "#2121DE"

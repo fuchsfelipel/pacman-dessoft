@@ -1,19 +1,20 @@
 # PyGame
 import pygame
+from pygame import K_UP, K_DOWN, K_LEFT, K_RIGHT, K_a, K_w, K_s, K_d
 
 # JSON
 import json
 
 # DIY
 import game_config
-from sprites.pacman import Pacman
+from sprites.pacman1 import Pacman1
+from sprites.pacman2 import Pacman2
 from malha import NodeGroup
 
 class HighscoreScreen:
     def __init__(self, window):
         self.window = window
         self.nodes = NodeGroup('assets/tabuleiro.txt')
-        self.pont = Pacman(self.nodes).points
 
     def update(self):
         # Background
