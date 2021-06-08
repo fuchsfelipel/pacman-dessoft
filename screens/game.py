@@ -37,13 +37,24 @@ class GameScreen:
         self.point_balls_eaten = 0
         
         # Sprites
+        self.sprites = {}
         self.pellets = PointBallGroup("assets/bolinhas.txt")
-        self.pacman = Pacman(self.nodes)
-        self.pinky = Pinky(self.nodes)
-        self.blinky = Blinky(self.nodes)
-        self.inky = Inky(self.nodes)
-        self.clyde = Clyde(self.nodes)
-        self.ghosts = [self.pinky, self.inky, self.clyde, self.blinky]
+        self.sprites["pacman-1"] = Pacman(self.nodes)
+        self.sprites["pacman-2"] = Pacman(self.nodes)
+        self.sprites["pinky"] = Pinky(self.nodes)
+        self.sprites["blinky"] = Blinky(self.nodes)
+        self.sprites["inky"] = Inky(self.nodes)
+        self.sprites["clyde"] = Clyde(self.nodes)
+
+        # Ghosts
+        self.ghosts = [self.sprites["pinky"],
+                       self.sprites["blinky"], self.sprites["inky"],
+                       self.sprites["clyde"]]
+
+        # PacMans
+        self.pacmans = [self.sprites["pacman-1"], self.sprites["pacman-2"]]
+
+        # Other stuff
         self.gOver = GameOverScreen(window)
         self.Over = False
 
@@ -65,12 +76,13 @@ class GameScreen:
             dt = self.clock.tick(game_config.GameDimensions.fps) / 1000.0
 
             # Agora vamos propagar a mudança de tempo nos sprites
-            self.pacman.update(dt)
-            self.pinky.update(dt)
-            self.blinky.update(dt)
-            self.inky.update(dt)
-            self.clyde.update(dt)
-            self.pacman.collide_with_ghost(self.ghosts)
+            for sprite in self.sprites.values():
+                sprite.update(dt)
+
+            for pacman in self.pacmans.values():
+                pacman.collide_with_ghost(self.ghosts)
+
+            # E atualizar os outros componentes do jogo
             self.pellets.update(dt)
             self.check_point_ball_events()
             self.check_pacman_mode()
