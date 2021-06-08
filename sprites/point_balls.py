@@ -87,6 +87,8 @@ class PointBallGroup(object):
         self.create_point_balls_list(point_balls_file)
 
     def resetPointball(self, file):
+        self.point_balls_list = []
+        self.super_point_balls = []
         self.create_point_balls_list(file)
 
     def update(self, dt):
