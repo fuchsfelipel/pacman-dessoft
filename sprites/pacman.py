@@ -96,7 +96,11 @@ class Pacman(object):
 
     def resetPacman(self, nodes):
         self.node = nodes.node_list[0]
-
+        self.speed += 0.3 * self.speed
+        self.set_position()
+        self.target = self.node
+        self.direction = game_config.Movements.STOP
+        
     def move_by_self(self):
         """
         Este método faz com que o Pac-Man continue seu último movimento
