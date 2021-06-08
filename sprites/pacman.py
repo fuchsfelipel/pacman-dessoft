@@ -19,7 +19,7 @@ class Pacman(object):
     Mudanças pontuais de lógica e regras de negócio também ocorreram
     """
 
-    def __init__(self, nodes):
+    def __init__(self, nodes, key_up, key_down, key_right, key_left):
         """
         Cria uma nova instância do Pac-Man
         :param nodes: Nós da malha de movimentação
@@ -52,6 +52,12 @@ class Pacman(object):
         self.livesh = game_config.GameDimensions.tile_h
         self.livesr = game_config.GameDimensions.row_num
 
+        # Teclas
+        self.key_up = key_up
+        self.key_down = key_down
+        self.key_right = key_right
+        self.key_left = key_left
+
     def set_position(self):
         """
         Define a posição do Pac-Man para algo discreto na malha
@@ -78,7 +84,7 @@ class Pacman(object):
         self.position += self.direction * self.speed * dt
 
         # Verificar a nova direção do Pac-Man
-        direction = utils.movement_translator.movement_translator(pygame.key.get_pressed())
+        direction = utils.movement_translator.movement_translator(pygame.key.get_pressed(), self.key_up, self.key_down, self.key_right, self.key_left)
 
         # Se houver nova direção --> iniciar novo movimento
         if direction:

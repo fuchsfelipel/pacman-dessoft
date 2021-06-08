@@ -1,15 +1,14 @@
-from pygame import K_UP, K_DOWN, K_LEFT, K_RIGHT
 import game_config
 
 
-def movement_translator(key):
-    if key[K_UP]:
+def movement_translator(key, key_up, key_down, key_right, key_left):
+    if key[key_up]:
         return game_config.Movements.UP
-    elif key[K_DOWN]:
+    elif key[key_down]:
         return game_config.Movements.DOWN
-    elif key[K_LEFT]:
+    elif key[key_left]:
         return game_config.Movements.LEFT
-    elif key[K_RIGHT]:
+    elif key[key_right]:
         return game_config.Movements.RIGHT
     return None
 

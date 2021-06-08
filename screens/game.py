@@ -1,7 +1,7 @@
 # PyGame
 from screens.gameover import *
 import pygame
-from pygame.locals import *
+from pygame import K_UP, K_DOWN, K_LEFT, K_RIGHT, K_a, K_w, K_s, K_d
 
 # Módulos DIY
 import game_config
@@ -39,8 +39,8 @@ class GameScreen:
         # Sprites
         self.sprites = {}
         self.pellets = PointBallGroup("assets/bolinhas.txt")
-        self.sprites["pacman-1"] = Pacman(self.nodes)
-        self.sprites["pacman-2"] = Pacman(self.nodes)
+        self.sprites["pacman-1"] = Pacman(self.nodes, K_UP, K_DOWN, K_RIGHT, K_LEFT)
+        self.sprites["pacman-2"] = Pacman(self.nodes, K_w, K_s, K_d, K_a)
         self.sprites["pinky"] = Pinky(self.nodes)
         self.sprites["blinky"] = Blinky(self.nodes)
         self.sprites["inky"] = Inky(self.nodes)
@@ -79,7 +79,7 @@ class GameScreen:
             for sprite in self.sprites.values():
                 sprite.update(dt)
 
-            for pacman in self.pacmans.values():
+            for pacman in self.pacmans:
                 pacman.collide_with_ghost(self.ghosts)
 
             # E atualizar os outros componentes do jogo
@@ -107,17 +107,19 @@ class GameScreen:
         Este método verifica os eventos com PointBalls e atualiza a nossa lista
         de PointBalls dentro da nossa instância do point_balls_list
         """
-        point_ball = self.pacman.eat_point_balls(self.pellets.point_balls_list, self.pellets.super_point_balls,
+        for pacman in self.pacmans:
+            point_ball = pacman.eat_point_balls(self.pellets.point_balls_list, self.pellets.super_point_balls,
                                                  self.ghosts)
 
-        # Será que precisamos remover alguma point_ball???
-        if point_ball:
-            self.pellets.point_balls_list.remove(point_ball)
-            eatball = pygame.mixer.Sound("assets/barulinho_comer.ogg")
-            eatball.play()
+            # Será que precisamos remover alguma point_ball???
+            if point_ball:
+                self.pellets.point_balls_list.remove(point_ball)
+                eatball = pygame.mixer.Sound("assets/barulinho_comer.ogg")
+                eatball.play()
 
     def resetLevel(self):
-        Pacman.resetPacman(self.nodes)
+        for pacman in self.pacmans:
+            pacman.resetPacman(self.nodes)
         PointBallGroup.resetPointball('assets/bolinhas.txt')
         Blinky.resetBlinky(self.nodes)
         Pinky.resetPinky(self.nodes)
@@ -140,14 +142,16 @@ class GameScreen:
             self.reset_victim_pacman()
 
     def reset_victim_pacman(self):
-       self.pacman.mode = game_config.PacManStatus.Victim
+        for pacman in self.pacmans:
+            pacman.mode = game_config.PacManStatus.Victim
 
-       for ghost in self.ghosts:
-           ghost.color = ghost.defaultcolor
+        for ghost in self.ghosts:
+            ghost.color = ghost.defaultcolor
 
     def Death(self):
-        if self.pacman.lives == -1:
-            self.Over = True
+        for pacman in self.pacmans:
+            if pacman.lives == -1:
+                self.Over = True
 
     def render(self):
         """
@@ -160,9 +164,6 @@ class GameScreen:
         # E agora renderizar o jogo
         self.nodes.render(self.window)
         self.pellets.render(self.window)
-        self.pacman.render(self.window)
-        self.pinky.render(self.window)
-        self.blinky.render(self.window)
-        self.inky.render(self.window)
-        self.clyde.render(self.window)
+        for sprite in self.sprites.values():
+            sprite.render(self.window)
         pygame.display.update()
