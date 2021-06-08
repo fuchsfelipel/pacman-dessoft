@@ -45,6 +45,9 @@ class Pinky:
         self.points = 0
         self.lives = game_config.Points.pacman_lives
 
+    def resetPinky(self, nodes):
+        self.node = nodes.node_list[40]
+
     def set_position(self):
         """
         Define a posição do Pac-Man para algo discreto na malha

@@ -1,4 +1,5 @@
 # PyGame
+from screens.gameover import *
 import pygame
 from pygame.locals import *
 
@@ -32,7 +33,9 @@ class GameScreen:
         # Mapa & Ambiente
         self.clock = pygame.time.Clock()  # Define um relógio de jogo que será usado para a movimentação de sprites.
         self.nodes = NodeGroup("assets/tabuleiro.txt")
-
+        self.level = 0
+        self.point_balls_eaten = 0
+        
         # Sprites
         self.pellets = PointBallGroup("assets/bolinhas.txt")
         self.pacman = Pacman(self.nodes)
@@ -41,6 +44,8 @@ class GameScreen:
         self.inky = Inky(self.nodes)
         self.clyde = Clyde(self.nodes)
         self.ghosts = [self.pinky, self.inky, self.clyde, self.blinky]
+        self.gOver = GameOverScreen(window)
+        self.Over = False
 
         # Lógica do PacMan assassino
         self.last_super_points = self.pellets.super_point_balls
@@ -54,23 +59,36 @@ class GameScreen:
         Atualiza o status de todos os sprites
         """
 
+        if self.Over != True:
         # Aqui definimos um delta de tempo entre um update e outro.
         # Isso, na prática, se traduz ao número de Frames por Segundo (FPS)
-        dt = self.clock.tick(game_config.GameDimensions.fps) / 1000.0
+            dt = self.clock.tick(game_config.GameDimensions.fps) / 1000.0
 
-        # Agora vamos propagar a mudança de tempo nos sprites
-        self.pacman.update(dt)
-        self.pinky.update(dt)
-        self.blinky.update(dt)
-        self.inky.update(dt)
-        self.clyde.update(dt)
-        self.pacman.collide_with_ghost(self.ghosts)
-        self.pellets.update(dt)
-        self.check_point_ball_events()
-        self.check_pacman_mode()
+            # Agora vamos propagar a mudança de tempo nos sprites
+            self.pacman.update(dt)
+            self.pinky.update(dt)
+            self.blinky.update(dt)
+            self.inky.update(dt)
+            self.clyde.update(dt)
+            self.pacman.collide_with_ghost(self.ghosts)
+            self.pellets.update(dt)
+            self.check_point_ball_events()
+            self.check_pacman_mode()
+            self.Death()
 
-        # Finalmente, vamos mostrar o objeto atualizado na tela
-        self.render()
+            # Finalmente, vamos mostrar o objeto atualizado na tela
+            self.render()
+
+        else:
+            self.gOver.update()
+            return self.music()
+
+
+    def music(self):
+        if self.Over != True:
+            # Musica de Game Over
+            music = pygame.mixer.music.load('assets/home_track.ogg')
+            pygame.mixer.music.play(1)            
 
     def check_point_ball_events(self):
         """
@@ -83,6 +101,22 @@ class GameScreen:
         # Será que precisamos remover alguma point_ball???
         if point_ball:
             self.pellets.point_balls_list.remove(point_ball)
+            eatball = pygame.mixer.Sound("assets/barulinho_comer.ogg")
+            eatball.play()
+
+    def resetLevel(self):
+        Pacman.resetPacman(self.nodes)
+        PointBallGroup.resetPointball('assets/bolinhas.txt')
+        Blinky.resetBlinky(self.nodes)
+        Pinky.resetPinky(self.nodes)
+        Inky.resetInky(self.nodes)
+        Clyde.resetClyde(self.nodes)
+
+    def levelController(self):
+        if self.pellets.is_empty():
+            self.level += 1
+            self.resetLevel()
+            print(self.level)
 
     def check_pacman_mode(self):
 
@@ -99,6 +133,10 @@ class GameScreen:
        for ghost in self.ghosts:
            ghost.color = ghost.defaultcolor
 
+    def Death(self):
+        if self.pacman.lives == -1:
+            self.Over = True
+
     def render(self):
         """
         Este método serve apenas para renderizar os nossos objetos na GUI
@@ -110,7 +148,7 @@ class GameScreen:
         # E agora renderizar o jogo
         self.nodes.render(self.window)
         self.pellets.render(self.window)
-        self.pacman.render(self.window,self.pinky,self.clyde,self.blinky,self.inky)
+        self.pacman.render(self.window)
         self.pinky.render(self.window)
         self.blinky.render(self.window)
         self.inky.render(self.window)

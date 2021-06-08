@@ -1,5 +1,21 @@
 # PyGame
 import pygame
 
+# DIY
+import game_config
+
+# Outros
+import os
+
 class GameOverScreen:
-    pass
+    def __init__(self, window):
+        self.window = window
+        self.lives = game_config.Points.pacman_lives
+        # # Musica
+        # music = pygame.mixer.music.load('assets/gameover_SFX.mp3')
+        # pygame.mixer.music.play(1)
+
+    def update(self):
+        self.window.blit(pygame.image.load("assets/gameover_screen.jpg"), (0, 0))
+        pygame.display.flip()
+
