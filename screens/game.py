@@ -65,6 +65,16 @@ class GameScreen:
         music = pygame.mixer.music.load('assets/home_track.ogg')
         pygame.mixer.music.play(1)
 
+    def reset(self):
+        if self.point_balls_eaten == 250:
+            self.pacman.resetPacman(self.nodes)
+            self.blinky.resetBlinky(self.nodes)
+            self.pinky.resetPinky(self.nodes)
+            self.clyde.resetClyde(self.nodes)
+            self.inky.resetInky(self.nodes)
+            self.pellets.resetPointball('assets/bolinhas.txt')
+            self.point_balls_eaten = 0
+        
     def update(self):
         """
         Atualiza o status de todos os sprites
@@ -87,7 +97,8 @@ class GameScreen:
             self.check_point_ball_events()
             self.check_pacman_mode()
             self.Death()
-
+            self.reset()
+            
             # Finalmente, vamos mostrar o objeto atualizado na tela
             self.render()
 
