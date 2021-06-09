@@ -1,16 +1,14 @@
-import pygame
-
-import game_config
-from game_config import *
-
 """
 Este módulo implementa as bolinhas de pontuação do jogo.
-Sua lógica e estrutra foi copiada do tutorial PacManCode
+Sua lógica e estrutra foi copiada do tutorial PacManCode.com
 porém houve refatorações e otimizações significativas.
 Mudanças pontuais de lógica e regras de negócio também
 ocorreram
 """
 
+import pygame
+import game_config
+from game_config import *
 
 class PointBall(object):
     """

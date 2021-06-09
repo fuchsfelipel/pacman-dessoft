@@ -1,3 +1,6 @@
+"""
+Este módulo define um fantasma.
+"""
 # --- Imports ---
 # PyGame
 import time
@@ -10,13 +13,22 @@ import utils.movement_translator
 
 
 class Ghost:
-
+    """
+    Esta classe define um fantasma.
+    """
     def __init__(self, nodes, color:game_config.Colors, start_node:int):
+        """
+        Este contrutor retorna um novo fantasma
+        @param nodes: Os nós do tabuleiro (a malha)
+        @param color: Cor do fantasma
+        @param start_node: Posição inicial do fantasma
+        """
         # Dados básicos do Pac-Man
         self.collideRadius = 5
         self.radius = 10
         self.defaultcolor = color
         self.color = color
+        self.start_position = start_node
 
         # Loading do ambiente
         self.nodes = nodes
@@ -32,7 +44,11 @@ class Ghost:
         self.set_position()
 
     def reset(self, nodes):
-        self.node = nodes.node_list[10]
+        """
+        Este método reseta o fantasma para seu status original
+        @param nodes: Nós da malha (tabuleiro)
+        """
+        self.node = nodes.node_list[self.start_position]
         self.speed += 0.5 * self.speed
         self.set_position()
         self.target = self.node
