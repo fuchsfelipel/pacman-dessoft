@@ -15,8 +15,6 @@ pygame.init()
 window = pygame.display.set_mode(game_config.GameDimensions.screen_size, 0, 32)
 pygame.display.set_caption('PacMan | Dessoft - Insper')
 
-play = True
-
 # Telas
 game = screens.game.GameScreen(window)
 home = screens.home.HomeScreen(window)
@@ -30,13 +28,14 @@ while status != game_config.GameStatus.quit:
         if event.type == pygame.QUIT:
             status = game_config.GameStatus.quit
 
+    # Mostrar a tela de jogo
     if status == game_config.GameStatus.game:
         game.update()
 
+    # Mostrar a tela de placar
     elif status == game_config.GameStatus.highScore:
         status = highscore.update()
 
+    # Mostrar a home screen
     elif status == game_config.GameStatus.home:
         status = home.update()
-
-

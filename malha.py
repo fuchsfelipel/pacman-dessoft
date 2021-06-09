@@ -1,22 +1,24 @@
-import pygame
+"""
+Este módulo define o tabuleiro de jogo.
+As principais mudanças são:
+- Adaptação para seguir as convenções do projeto
+- Transformação de métodos desnecessários em funções
+- Otimizações ou simplificações pontuais
 
+Adaptado de: https://pacmancode.com/node-movement-part-3
+"""
+
+import pygame
 import game_config
 from game_config import *
 from utils.stack import Stack
 
 
 class Node(object):
-    """
-    Esta classe define o tabuleiro de jogo.
-    Ela foi adaptada tutorial pacmancode.com;
-    As principais mudanças são:
-    - Adaptação para seguir as convenções do projeto
-    - Transformação de métodos desnecessários em funções
-    - Otimizações ou simplificações pontuais
-    """
     def __init__(self, row, column):
         self.row, self.column = row, column
-        self.position = Vector2(column * game_config.GameDimensions.tile_w, row * game_config.GameDimensions.tile_h)
+        self.position = Vector2(
+            column * game_config.GameDimensions.tile_w, row * game_config.GameDimensions.tile_h)
         self.neighbors = {game_config.Movements.UP: None,
                           game_config.Movements.DOWN: None,
                           game_config.Movements.LEFT: None,
@@ -29,8 +31,6 @@ class Node(object):
             if self.neighbors[n] is not None:
                 line_start = self.position.asTuple()
                 line_end = self.neighbors[n].position.asTuple()
-                # pygame.draw.line(screen, game_config.Colors.tumbleweed, line_start, line_end, 4)
-                # pygame.draw.circle(screen, game_config.Colors.red, self.position.asInt(), 12)
 
 
 class NodeGroup(object):
@@ -44,6 +44,8 @@ class NodeGroup(object):
         self.create_node_list(level, self.node_list)
         self.setup_portal_nodes()
 
+    # O método abaixo foi tornado estáticos pois não precisava ser dinâmico
+    # e achamos que seria melhor não transformá-lo em função por uma questão de organizacão.
     @staticmethod
     def read_maze_file(maze_file):
         f = open(maze_file, "r")
@@ -58,10 +60,14 @@ class NodeGroup(object):
         while not self.nodeStack.isEmpty():
             node = self.nodeStack.pop()
             self.add_node(node, node_list)
-            left_node = self.get_path_node(game_config.Movements.LEFT, node.row, node.column - 1, node_list)
-            right_node = self.get_path_node(game_config.Movements.RIGHT, node.row, node.column + 1, node_list)
-            up_node = self.get_path_node(game_config.Movements.UP, node.row - 1, node.column, node_list)
-            down_node = self.get_path_node(game_config.Movements.DOWN, node.row + 1, node.column, node_list)
+            left_node = self.get_path_node(
+                game_config.Movements.LEFT, node.row, node.column - 1, node_list)
+            right_node = self.get_path_node(
+                game_config.Movements.RIGHT, node.row, node.column + 1, node_list)
+            up_node = self.get_path_node(
+                game_config.Movements.UP, node.row - 1, node.column, node_list)
+            down_node = self.get_path_node(
+                game_config.Movements.DOWN, node.row + 1, node.column, node_list)
             node.neighbors[game_config.Movements.LEFT] = left_node
             node.neighbors[game_config.Movements.RIGHT] = right_node
             node.neighbors[game_config.Movements.UP] = up_node
@@ -81,6 +87,8 @@ class NodeGroup(object):
                     return node
         return None
 
+    # O método abaixo foi tornado estáticos pois não precisava ser dinâmico
+    # e achamos que seria melhor não transformá-lo em função por uma questão de organizacão.
     @staticmethod
     def get_node(x, y, node_list=[]):
         for node in node_list:
@@ -88,6 +96,8 @@ class NodeGroup(object):
                 return node
         return None
 
+    # O método abaixo foi tornado estáticos pois não precisava ser dinâmico
+    # e achamos que seria melhor não transformá-lo em função por uma questão de organizacão.
     @staticmethod
     def get_node_from_node(node, node_list):
         if node is not None:
@@ -109,6 +119,8 @@ class NodeGroup(object):
         if node is not None and not self.node_in_list(node, node_list):
             self.nodeStack.push(node)
 
+    # O método abaixo foi tornado estáticos pois não precisava ser dinâmico
+    # e achamos que seria melhor não transformá-lo em função por uma questão de organizacão.
     @staticmethod
     def node_in_list(node, node_list):
         for inode in node_list:
