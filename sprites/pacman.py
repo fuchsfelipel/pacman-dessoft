@@ -203,7 +203,7 @@ class Pacman(object):
                     self.points += game_config.Points.super_point_balls
                     self.mode = game_config.PacManStatus.Assassin
                     for ghost in ghosts:
-                        ghost.color = "navy"
+                        ghost.image = "assets/navy.png"
                 return ball
         if self.points == 5000:
             self.lives += 1

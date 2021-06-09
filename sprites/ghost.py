@@ -16,7 +16,7 @@ class Ghost:
     """
     Esta classe define um fantasma.
     """
-    def __init__(self, nodes, color:game_config.Colors, start_node:int):
+    def __init__(self, nodes, color:game_config.Colors, start_node:int, image):
         """
         Este contrutor retorna um novo fantasma
         @param nodes: Os nós do tabuleiro (a malha)
@@ -29,6 +29,8 @@ class Ghost:
         self.defaultcolor = color
         self.color = color
         self.start_position = start_node
+        self.image = image
+        self.default_image = image
 
         # Loading do ambiente
         self.nodes = nodes
@@ -212,4 +214,5 @@ class Ghost:
         :param screen: Tela do PyGame
         """
         # Desenha um círculo na tela
-        pygame.draw.circle(screen, self.color, self.position.asInt(), self.radius)
+        #pygame.draw.circle(screen, self.color, self.position.asInt(), self.radius)
+        screen.blit(pygame.image.load(self.image), (self.position.x-10, self.position.y-10))
