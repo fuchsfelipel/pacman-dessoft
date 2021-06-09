@@ -1,11 +1,12 @@
+"""
+Este módulo cria o tipo Vector2 que representa um vetor 2-D.
+Adaptado de: https://pacmancode.com/vectors
+"""
+
 import math
 
 
 class Vector2(object):
-    """
-    Esta classe cria o tipo Vector2 que representa um vetor 2-D
-    Adaptado de pacmancode.com
-    """
     def __init__(self, x=0, y=0):
         self.x = x
         self.y = y

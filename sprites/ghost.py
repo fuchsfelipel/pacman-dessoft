@@ -1,72 +1,70 @@
+"""
+Este módulo define um fantasma.
+"""
 # --- Imports ---
 # PyGame
-import random
 import time
-
+import random
 import pygame
-import json
 
 # Módulo DIY
 import game_config
 import utils.movement_translator
-from sprites import inky, blinky, pinky, clyde
 
-class Pacman1(object):
-    """
-    Esta classe define o Pac-Man.
-    Em grande parte, sua lógica deve-se ao tutorial pacmancode
-    Dito isso, existe uma boa quantidade de código original ou refatorado/otimizado
-    Mudanças pontuais de lógica e regras de negócio também ocorreram
-    """
 
-    def __init__(self, nodes, key_up, key_down, key_right, key_left):
+class Ghost:
+    """
+    Esta classe define um fantasma.
+    """
+    def __init__(self, nodes, color:game_config.Colors, start_node:int, image):
         """
-        Cria uma nova instância do Pac-Man
-        :param nodes: Nós da malha de movimentação
+        Este contrutor retorna um novo fantasma
+        @param nodes: Os nós do tabuleiro (a malha)
+        @param color: Cor do fantasma
+        @param start_node: Posição inicial do fantasma
         """
         # Dados básicos do Pac-Man
-        self.name = "pacman"
         self.collideRadius = 5
         self.radius = 10
-        self.color = game_config.Colors.orange
-
-        # Por padrão o Pac-Man é comido por fantasmas
-        self.mode = game_config.PacManStatus.Victim
+        self.defaultcolor = color
+        self.color = color
+        self.start_position = start_node
+        self.image = image
+        self.default_image = image
 
         # Loading do ambiente
         self.nodes = nodes
-        self.node = nodes.node_list[0]
+
+        # Define a posição inicial
+        self.node = nodes.node_list[start_node]
 
         # Dados de movimentação
-        self.direction = game_config.Movements.STOP
+        self.direction = utils.movement_translator.movement_ghosts(random.randint(0,3))
         self.speed = 100
         self.position = self.node.position.copy()
         self.target = self.node
         self.set_position()
 
-        # Coisas de Placar
-        self.points = 0
-        self.lives = game_config.Points.pacman_lives
-
-        # Exibição das Vidas
-        self.livesh = game_config.GameDimensions.tile_h
-        self.livesr = game_config.GameDimensions.row_num
-
-        # Teclas
-        self.key_up = key_up
-        self.key_down = key_down
-        self.key_right = key_right
-        self.key_left = key_left
+    def reset(self, nodes):
+        """
+        Este método reseta o fantasma para seu status original
+        @param nodes: Nós da malha (tabuleiro)
+        """
+        self.node = nodes.node_list[self.start_position]
+        self.speed += 0.5 * self.speed
+        self.set_position()
+        self.target = self.node
+        self.direction = utils.movement_translator.movement_ghosts(random.randint(0,3))
 
     def set_position(self):
         """
-        Define a posição do Pac-Man para algo discreto na malha
+        Define a posição do Ghost para algo discreto na malha
         """
         self.position = self.node.position.copy()
 
     def portal(self):
         """
-        Este método serve para teleportar o Pac-Man de um lado
+        Este método serve para teleportar o Ghost de um lado
         da malha para o outro.
         """
         if self.node.portal_node:
@@ -74,33 +72,29 @@ class Pacman1(object):
             self.node = self.node.portal_node
             self.set_position()
 
+    tempDt = 0
+    
     def update(self, dt):
         """
         Este é o método que precisa ser invocado pelo loop de jogo.
-        Ele faz todos os update necessários no Pac-Man
+        Ele faz todos os update necessários no Ghost
         :param dt: Delta de tempo
         """
         # Mudança de posição usando a forma vetorial de S = v*t
         self.position += self.direction * self.speed * dt
 
         # Verificar a nova direção do Pac-Man
-        direction = utils.movement_translator.movement_translator(pygame.key.get_pressed(), self.key_up, self.key_down, self.key_right, self.key_left)
+        self.tempDt += dt
 
         # Se houver nova direção --> iniciar novo movimento
-        if direction:
-            self.move_by_key(direction)
+        
+        if self.direction:
+            self.move_by_key(self.direction)
 
         # Ou continuar o último...
         else:
             self.move_by_self()
 
-    def resetPacman(self, nodes):
-        self.node = nodes.node_list[0]
-        self.speed += 0.3 * self.speed
-        self.set_position()
-        self.target = self.node
-        self.direction = game_config.Movements.STOP
-        
     def move_by_self(self):
         """
         Este método faz com que o Pac-Man continue seu último movimento
@@ -111,19 +105,20 @@ class Pacman1(object):
             # Bati em um portal?
             self.portal()
 
-            # Será que o Pac-Man bateu com o nariz na parede?
+            # Será que o Ghost bateu com o nariz na parede?
             if self.node.neighbors[self.direction] is not None:
                 self.target = self.node.neighbors[self.direction]
             else:
                 self.set_position()
-                self.direction = game_config.Movements.STOP
+                self.direction = utils.movement_translator.movement_ghosts(random.randint(0,3))
 
     def move_by_key(self, direction):
         """
-        Este método inicia um novo movimento no Pac-Man
+        Este método inicia um novo movimento no Ghost
         (Ou seja, muda de direção)
         """
         # Se o Pac-Man estiver parado
+        
         if (self.direction is game_config.Movements.STOP) and (self.node.neighbors[direction] is not None):
             self.target = self.node.neighbors[direction]
             self.direction = direction
@@ -159,7 +154,8 @@ class Pacman1(object):
                     # ou parar o Pac-Man
                     else:
                         self.set_position()
-                        self.direction = game_config.Movements.STOP
+                        self.direction = utils.movement_translator.movement_ghosts(random.randint(0,3))
+
                 except:
                     pass
 
@@ -191,7 +187,11 @@ class Pacman1(object):
         # Vamos inverter o alvo
         self.node, self.target = self.target, self.node
 
-    def eat_point_balls(self, point_list, superpoint_list, ghosts):
+    def be_eaten(self):
+        self.node = self.nodes.node_list[0]
+        self.set_position()
+
+    def eat_point_balls(self, point_list):
         """
         Este método faz com que o Pac-Man coma bolinhas
         :param point_list:
@@ -201,36 +201,12 @@ class Pacman1(object):
             if (self.position - ball.position).magnitudeSquared() <= (ball.radius + self.collideRadius) ** 2:
                 # Soma os pontos ao placar atual
                 self.points += game_config.Points.point_balls
-                if (ball in superpoint_list):
-                    # Soma os pontos ao placar atual
-                    self.points += game_config.Points.super_point_balls
-                    self.mode = game_config.PacManStatus.Assassin
-                    for ghost in ghosts:
-                        ghost.color = "navy"
+
+
                 return ball
-        if self.points == 5000:
-            self.lives += 1
-            self.points = 0
+
         pygame.mixer.music.stop()
         return None
-
-    def collide_with_ghost(self, ghosts):
-        """
-        Este método faz com que o Pac-Man morra ao tocar em um fantasma
-        :param point_list:
-        """
-        for ghost in ghosts:
-            # Se de fato o Pac-Man colidiu com o ponto
-            if (self.position - ghost.position).magnitudeSquared() <= (ghost.radius + self.collideRadius) ** 2:
-                # PacMan morre
-                if self.mode == game_config.PacManStatus.Victim:
-                    self.node = self.nodes.node_list[random.choice([5, 15, 25, 35])]
-                    self.set_position()
-                    self.lives -= 1
-                else:
-                    self.points += game_config.Points.ghost_point
-                    ghost.be_eaten()
- 
 
     def render(self, screen):
         """
@@ -238,21 +214,5 @@ class Pacman1(object):
         :param screen: Tela do PyGame
         """
         # Desenha um círculo na tela
-        pygame.draw.circle(screen, self.color, self.position.asInt(), self.radius)
-        
-        # Escreve o Score na tela
-
-        white = (255, 255, 255)
-        font = pygame.font.SysFont(None, 40)
-        Hi = font.render('HI', True, white)
-        x = 5 + self.radius + (2 * self.radius + 5) * 4
-        y = (self.livesh - 1) * self.livesr
-        score = font.render(str(self.points), True, white)
-        screen.blit(score, (x + 60, y))
-        screen.blit(Hi, (x, y))
-
-        # Desenha as vidas na tela
-        for i in range(self.lives):
-            x = 5 + self.radius + (2 * self.radius + 5) * i
-            y = self.livesh * (self.livesr - 1)
-            pygame.draw.circle(screen, self.color, (x, y), self.radius)
+        #pygame.draw.circle(screen, self.color, self.position.asInt(), self.radius)
+        screen.blit(pygame.image.load(self.image), (self.position.x-10, self.position.y-10))

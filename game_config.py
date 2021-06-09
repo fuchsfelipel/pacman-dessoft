@@ -1,34 +1,45 @@
+"""
+Este módulo define as configurações do jogo.
+Ele se trata de uma coleção de classes estáticas, sem construtores. Apenas constantes.
+"""
 from utils.vector import Vector2
 
 
 class GameDimensions:
     """
-    Especificações da tela de jogo
+    Especificações da tela de jogo.
     """
-    tile_w = 16
-    fps = 60
-    tile_h = 16
-    row_num = 36
-    col_num = 28
-    screen_w = tile_w * col_num
-    screen_h = tile_h * row_num
+    # Vamos usar um sistema de colunas e fileiras
+    # Ou seja, uma tabela
+    tile_w = 16     # Altura de uma célula
+    tile_h = 16     # Largura de uma célular
+    row_num = 36    # Número de Fileiras
+    col_num = 28    # Número de Colunas
+
+    # Configurações de Display
+    fps = 60    # FPS do Jogo --> Usado para o Clock.tick
+    screen_w = tile_w * col_num # Largura da Tela
+    screen_h = tile_h * row_num # Altura da Tela
     screen_size = (screen_w, screen_h)
     screen_center = (screen_w // 2, screen_h // 2)
 
 # Cores: https://www.schemecolor.com/pac-man-game-colors.php
+
+
 class Colors:
     # Google ´nome da cor hex
     """"Paleta de cores do jogo"""
-    brown= "#964B00" #Clyde
+    brown = "#964B00"  # Clyde
     green = "#00FF00"
     orange = '#FFA500'
-    red = "#FD0000" #Blink
-    tumbleweed = "#DEA185" 
+    red = "#FD0000"  # Blink
+    tumbleweed = "#DEA185"
     bluebonnet = "#2121DE"
-    neonBlue = "#1919A6" #Inky
-    yellow = "#FFFF00" #Pac-Man
+    neonBlue = "#1919A6"  # Inky
+    yellow = "#FFFF00"  # Pac-Man
     black = "#000000"
-    pink = "#FF007F" #Pinky
+    pink = "#FF007F"  # Pinky
+
 
 class GameStatus:
     """Status possíveis para o jogo"""
@@ -69,6 +80,7 @@ class Movements:
         elif direction is Movements.RIGHT:
             return Movements.LEFT
 
+
 class Points:
     """
     Define os pontos de cada coisa
@@ -78,6 +90,12 @@ class Points:
     super_point_balls = 50
     ghost_point = 100
 
+
 class PacManStatus:
+    """
+    A qualquer momento o Pac-Man pode estar em dois estados:
+    - Assasino: Ele come os fantasmas
+    - Vítima: Ele é comido pelos fantasmas
+    """
     Victim = 0
     Assassin = 1
