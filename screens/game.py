@@ -146,8 +146,15 @@ class GameScreen:
 
     def check_pacman_mode(self):
         """
-        Este método faz com que os Pacmans voltem de a ser vítimas.
+        Este método faz com que os Pacmans voltem de a ser vítimas e homogieniza o status.
         """
+
+        # Se algum dos Pacmans tiver comida uma super point ball
+        # vamos fazer com que o outro também vire assassino.
+        for pacman in self.pacmans:
+            if pacman.mode is game_config.PacManStatus.Assassin:
+                for pacman in self.pacmans:
+                    pacman.mode = game_config.PacManStatus.Assassin
 
         # O self.clock % 12 define um tempo relativamente aleatório para quanto tempo
         # o Pac-Man ficará assassino pois nunca saberemos o self.clock atual
