@@ -15,7 +15,7 @@ class Pacman(object):
     Mudanças pontuais de lógica e regras de negócio também ocorreram
     """
 
-    def __init__(self, nodes, key_up, key_down, key_right, key_left, color):
+    def __init__(self, nodes, key_up, key_down, key_right, key_left, color, x_offset):
         """
         Cria uma nova instância do Pac-Man
         :param nodes: Nós da malha de movimentação
@@ -25,6 +25,7 @@ class Pacman(object):
         self.collideRadius = 5
         self.radius = 10
         self.color = color
+        self.x_offset = x_offset
 
         # Por padrão o Pac-Man é comido por fantasmas
         self.mode = game_config.PacManStatus.Victim
@@ -241,7 +242,7 @@ class Pacman(object):
         white = (255, 255, 255)
         font = pygame.font.SysFont(None, 40)
         Hi = font.render('HI', True, white)
-        x = 5 + self.radius + (2 * self.radius + 5) * 4
+        x = self.x_offset + self.radius + (2 * self.radius + 5) * 4
         y = (self.livesh - 1) * self.livesr
         score = font.render(str(self.points), True, white)
         screen.blit(score, (x + 60, y))

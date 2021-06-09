@@ -40,8 +40,8 @@ class GameScreen:
         # Sprites
         self.sprites = {}
         self.pellets = PointBallGroup("assets/bolinhas.txt")
-        self.sprites["pacman-1"] = Pacman(self.nodes, K_UP, K_DOWN, K_RIGHT, K_LEFT, game_config.Colors.yellow)
-        self.sprites["pacman-2"] = Pacman(self.nodes, K_w, K_s, K_d, K_a, game_config.Colors.orange)
+        self.sprites["pacman-1"] = Pacman(self.nodes, K_UP, K_DOWN, K_RIGHT, K_LEFT, game_config.Colors.yellow, 5)
+        self.sprites["pacman-2"] = Pacman(self.nodes, K_w, K_s, K_d, K_a, game_config.Colors.orange, 150)
         self.sprites["pinky"] = Ghost(self.nodes, game_config.Colors.red, 10)
         self.sprites["blinky"] = Ghost(self.nodes, game_config.Colors.pink, 20)
         self.sprites["inky"] = Ghost(self.nodes, game_config.Colors.brown, 30)
