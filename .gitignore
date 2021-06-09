@@ -1,0 +1,6 @@
+__pycache__/
+*/__pycache__/
+score.json
+highscore.json
+.idea/
+.vscode/
