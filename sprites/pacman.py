@@ -1,17 +1,13 @@
 # --- Imports ---
 # PyGame
 import random
-import time
-
 import pygame
-import json
 
 # Módulo DIY
 import game_config
 import utils.movement_translator
-from sprites import inky, blinky, pinky, clyde
 
-class Pacman1(object):
+class Pacman(object):
     """
     Esta classe define o Pac-Man.
     Em grande parte, sua lógica deve-se ao tutorial pacmancode
@@ -19,7 +15,7 @@ class Pacman1(object):
     Mudanças pontuais de lógica e regras de negócio também ocorreram
     """
 
-    def __init__(self, nodes, key_up, key_down, key_right, key_left):
+    def __init__(self, nodes, key_up, key_down, key_right, key_left, color):
         """
         Cria uma nova instância do Pac-Man
         :param nodes: Nós da malha de movimentação
@@ -28,7 +24,7 @@ class Pacman1(object):
         self.name = "pacman"
         self.collideRadius = 5
         self.radius = 10
-        self.color = game_config.Colors.orange
+        self.color = color
 
         # Por padrão o Pac-Man é comido por fantasmas
         self.mode = game_config.PacManStatus.Victim

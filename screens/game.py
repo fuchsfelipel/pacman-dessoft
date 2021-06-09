@@ -5,8 +5,7 @@ from pygame import K_UP, K_DOWN, K_LEFT, K_RIGHT, K_a, K_w, K_s, K_d
 
 # Módulos DIY
 import game_config
-from sprites.pacman1 import Pacman1
-from sprites.pacman2 import Pacman2
+from sprites.pacman import Pacman
 from sprites.pinky import Pinky
 from sprites.blinky import Blinky
 from sprites.inky import Inky
@@ -40,8 +39,8 @@ class GameScreen:
         # Sprites
         self.sprites = {}
         self.pellets = PointBallGroup("assets/bolinhas.txt")
-        self.sprites["pacman-1"] = Pacman1(self.nodes, K_UP, K_DOWN, K_RIGHT, K_LEFT)
-        self.sprites["pacman-2"] = Pacman2(self.nodes, K_w, K_s, K_d, K_a)
+        self.sprites["pacman-1"] = Pacman(self.nodes, K_UP, K_DOWN, K_RIGHT, K_LEFT, game_config.Colors.yellow)
+        self.sprites["pacman-2"] = Pacman(self.nodes, K_w, K_s, K_d, K_a, game_config.Colors.orange)
         self.sprites["pinky"] = Pinky(self.nodes)
         self.sprites["blinky"] = Blinky(self.nodes)
         self.sprites["inky"] = Inky(self.nodes)

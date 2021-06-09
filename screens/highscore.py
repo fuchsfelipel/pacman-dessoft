@@ -7,9 +7,8 @@ import json
 
 # DIY
 import game_config
-from sprites.pacman1 import Pacman1
-from sprites.pacman2 import Pacman2
 from malha import NodeGroup
+
 
 class HighscoreScreen:
     def __init__(self, window):
