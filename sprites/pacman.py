@@ -90,7 +90,7 @@ class Pacman(object):
         else:
             self.move_by_self()
 
-    def resetPacman(self, nodes):
+    def reset(self, nodes):
         self.node = nodes.node_list[0]
         self.speed += 0.3 * self.speed
         self.set_position()

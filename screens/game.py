@@ -1,3 +1,6 @@
+"""
+Este módulo define a tela de jogo.
+"""
 # PyGame
 from screens.gameover import *
 import pygame
@@ -6,10 +9,7 @@ from pygame import K_UP, K_DOWN, K_LEFT, K_RIGHT, K_a, K_w, K_s, K_d
 # Módulos DIY
 import game_config
 from sprites.pacman import Pacman
-from sprites.pinky import Pinky
-from sprites.blinky import Blinky
-from sprites.inky import Inky
-from sprites.clyde import Clyde
+from sprites.ghost import Ghost
 from malha import NodeGroup
 from sprites.point_balls import PointBallGroup
 
@@ -19,6 +19,7 @@ class GameScreen:
     Define a tela de jogo
     Classe inspirada no tutorial PacManCode
     """
+
     def __init__(self, window):
         """
         Inicia uma novar partida do jogo
@@ -35,16 +36,16 @@ class GameScreen:
         self.nodes = NodeGroup("assets/tabuleiro.txt")
         self.level = 0
         self.point_balls_eaten = 0
-        
+
         # Sprites
         self.sprites = {}
         self.pellets = PointBallGroup("assets/bolinhas.txt")
         self.sprites["pacman-1"] = Pacman(self.nodes, K_UP, K_DOWN, K_RIGHT, K_LEFT, game_config.Colors.yellow)
         self.sprites["pacman-2"] = Pacman(self.nodes, K_w, K_s, K_d, K_a, game_config.Colors.orange)
-        self.sprites["pinky"] = Pinky(self.nodes)
-        self.sprites["blinky"] = Blinky(self.nodes)
-        self.sprites["inky"] = Inky(self.nodes)
-        self.sprites["clyde"] = Clyde(self.nodes)
+        self.sprites["pinky"] = Ghost(self.nodes, game_config.Colors.red, 10)
+        self.sprites["blinky"] = Ghost(self.nodes, game_config.Colors.pink, 20)
+        self.sprites["inky"] = Ghost(self.nodes, game_config.Colors.brown, 30)
+        self.sprites["clyde"] = Ghost(self.nodes, game_config.Colors.green, 40)
 
         # Ghosts
         self.ghosts = [self.sprites["pinky"],
@@ -66,23 +67,25 @@ class GameScreen:
         pygame.mixer.music.play(1)
 
     def reset(self):
+        """
+        Este método reseta as point_balls. Ele faz parte do PacMan mudar de nível.
+        """
+        # Se todas as point_balls tiverem sido comidas
         if self.point_balls_eaten == 250:
-            self.pacman.resetPacman(self.nodes)
-            self.blinky.resetBlinky(self.nodes)
-            self.pinky.resetPinky(self.nodes)
-            self.clyde.resetClyde(self.nodes)
-            self.inky.resetInky(self.nodes)
+            for sprite in self.sprites.values():
+                sprite.reset(self.nodes)
+
             self.pellets.resetPointball('assets/bolinhas.txt')
             self.point_balls_eaten = 0
-        
+
     def update(self):
         """
         Atualiza o status de todos os sprites
         """
 
         if self.Over != True:
-        # Aqui definimos um delta de tempo entre um update e outro.
-        # Isso, na prática, se traduz ao número de Frames por Segundo (FPS)
+            # Aqui definimos um delta de tempo entre um update e outro.
+            # Isso, na prática, se traduz ao número de Frames por Segundo (FPS)
             dt = self.clock.tick(game_config.GameDimensions.fps) / 1000.0
 
             # Agora vamos propagar a mudança de tempo nos sprites
@@ -96,22 +99,14 @@ class GameScreen:
             self.pellets.update(dt)
             self.check_point_ball_events()
             self.check_pacman_mode()
-            self.Death()
+            self.death()
             self.reset()
-            
+
             # Finalmente, vamos mostrar o objeto atualizado na tela
             self.render()
 
         else:
             self.gOver.update()
-            return self.music()
-
-
-    def music(self):
-        if self.Over != True:
-            # Musica de Game Over
-            music = pygame.mixer.music.load('assets/home_track.ogg')
-            pygame.mixer.music.play(1)            
 
     def check_point_ball_events(self):
         """
@@ -120,7 +115,7 @@ class GameScreen:
         """
         for pacman in self.pacmans:
             point_ball = pacman.eat_point_balls(self.pellets.point_balls_list, self.pellets.super_point_balls,
-                                                 self.ghosts)
+                                                self.ghosts)
 
             # Será que precisamos remover alguma point_ball???
             if point_ball:
@@ -128,38 +123,47 @@ class GameScreen:
                 eatball = pygame.mixer.Sound("assets/barulinho_comer.ogg")
                 eatball.play()
 
-    def resetLevel(self):
-        for pacman in self.pacmans:
-            pacman.resetPacman(self.nodes)
-        PointBallGroup.resetPointball('assets/bolinhas.txt')
-        Blinky.resetBlinky(self.nodes)
-        Pinky.resetPinky(self.nodes)
-        Inky.resetInky(self.nodes)
-        Clyde.resetClyde(self.nodes)
+    def reset_level(self):
+        """
+        Este método reseta o tabuleiro de jogo e todos os sprites
+        @return:
+        """
+        for sprite in self.sprites:
+            sprite.reset(self.nodes)
 
-    def levelController(self):
+        PointBallGroup.resetPointball('assets/bolinhas.txt')
+
+    def level_controller(self):
+        """
+        Este método server para controlar o nível do jogo.
+        Quando não há mais point_balls ele invoca os outros métodos
+        envolvidos no reset
+        """
         if self.pellets.is_empty():
             self.level += 1
-            self.resetLevel()
+            self.reset_level()
             print(self.level)
 
     def check_pacman_mode(self):
+        """
+        Este método faz com que os Pacmans voltem de a ser vítimas.
+        """
 
         # O self.clock % 12 define um tempo relativamente aleatório para quanto tempo
         # o Pac-Man ficará assassino pois nunca saberemos o self.clock atual
         # Ex. Pode ser que o modo dure 1 segundo ou 12
         if pygame.time.get_ticks() % 1000 == 0:
+            for pacman in self.pacmans:
+                pacman.mode = game_config.PacManStatus.Victim
 
-            self.reset_victim_pacman()
+            for ghost in self.ghosts:
+                ghost.color = ghost.defaultcolor
 
-    def reset_victim_pacman(self):
-        for pacman in self.pacmans:
-            pacman.mode = game_config.PacManStatus.Victim
-
-        for ghost in self.ghosts:
-            ghost.color = ghost.defaultcolor
-
-    def Death(self):
+    def death(self):
+        """
+        Este método define o que é um gameover e checa se ele ocorreu.
+        @return:
+        """
         for pacman in self.pacmans:
             if pacman.lives == -1:
                 self.Over = True

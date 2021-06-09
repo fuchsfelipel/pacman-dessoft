@@ -9,44 +9,30 @@ import game_config
 import utils.movement_translator
 
 
-class Pinky:
-    """
-    Esta classe define o Pinky.
-    Em grande parte, sua lógica deve-se ao tutorial pacmancode
-    Dito isso, existe uma boa quantidade de código original ou refatorado/otimizado
-    Mudanças pontuais de lógica e regras de negócio também ocorreram
-    """
+class Ghost:
 
-    def __init__(self, nodes):
-        """
-        Cria uma nova instância do Pac-Man
-        :param nodes: Nós da malha de movimentação
-        """
+    def __init__(self, nodes, color:game_config.Colors, start_node:int):
         # Dados básicos do Pac-Man
-        self.name = "pinky"
         self.collideRadius = 5
         self.radius = 10
-        self.defaultcolor = game_config.Colors.pink
-        self.color = game_config.Colors.pink
+        self.defaultcolor = color
+        self.color = color
 
         # Loading do ambiente
         self.nodes = nodes
-        self.node = nodes.node_list[40]
+
+        # Define a posição inicial
+        self.node = nodes.node_list[start_node]
 
         # Dados de movimentação
         self.direction = utils.movement_translator.movement_ghosts(random.randint(0,3))
-        #game_config.Movements.STOP
         self.speed = 100
         self.position = self.node.position.copy()
         self.target = self.node
         self.set_position()
 
-        # Coisas de Placar
-        self.points = 0
-        self.lives = game_config.Points.pacman_lives
-
-    def resetPinky(self, nodes):
-        self.node = nodes.node_list[40]
+    def reset(self, nodes):
+        self.node = nodes.node_list[10]
         self.speed += 0.5 * self.speed
         self.set_position()
         self.target = self.node
@@ -54,13 +40,13 @@ class Pinky:
 
     def set_position(self):
         """
-        Define a posição do Pac-Man para algo discreto na malha
+        Define a posição do Ghost para algo discreto na malha
         """
         self.position = self.node.position.copy()
 
     def portal(self):
         """
-        Este método serve para teleportar o Pac-Man de um lado
+        Este método serve para teleportar o Ghost de um lado
         da malha para o outro.
         """
         if self.node.portal_node:
@@ -73,7 +59,7 @@ class Pinky:
     def update(self, dt):
         """
         Este é o método que precisa ser invocado pelo loop de jogo.
-        Ele faz todos os update necessários no Pac-Man
+        Ele faz todos os update necessários no Ghost
         :param dt: Delta de tempo
         """
         # Mudança de posição usando a forma vetorial de S = v*t
@@ -81,10 +67,6 @@ class Pinky:
 
         # Verificar a nova direção do Pac-Man
         self.tempDt += dt
-        #if (self.tempDt % 1000):
-         #   direction = utils.movement_translator.movement_ghosts(random.randint(0,3))
-            
-          #  self.tempDt = 0
 
         # Se houver nova direção --> iniciar novo movimento
         
@@ -105,20 +87,20 @@ class Pinky:
             # Bati em um portal?
             self.portal()
 
-            # Será que o Pac-Man bateu com o nariz na parede?
+            # Será que o Ghost bateu com o nariz na parede?
             if self.node.neighbors[self.direction] is not None:
                 self.target = self.node.neighbors[self.direction]
             else:
                 self.set_position()
-               # self.direction = game_config.Movements.STOP
                 self.direction = utils.movement_translator.movement_ghosts(random.randint(0,3))
 
     def move_by_key(self, direction):
         """
-        Este método inicia um novo movimento no Pac-Man
+        Este método inicia um novo movimento no Ghost
         (Ou seja, muda de direção)
         """
         # Se o Pac-Man estiver parado
+        
         if (self.direction is game_config.Movements.STOP) and (self.node.neighbors[direction] is not None):
             self.target = self.node.neighbors[direction]
             self.direction = direction
@@ -187,6 +169,10 @@ class Pinky:
         # Vamos inverter o alvo
         self.node, self.target = self.target, self.node
 
+    def be_eaten(self):
+        self.node = self.nodes.node_list[0]
+        self.set_position()
+
     def eat_point_balls(self, point_list):
         """
         Este método faz com que o Pac-Man coma bolinhas
@@ -203,10 +189,6 @@ class Pinky:
 
         pygame.mixer.music.stop()
         return None
-
-    def be_eaten(self):
-        self.node = self.nodes.node_list[0]
-        self.set_position()
 
     def render(self, screen):
         """

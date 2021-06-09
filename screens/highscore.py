@@ -1,3 +1,6 @@
+"""
+Este módulo define a tela de highscore.
+"""
 # PyGame
 import pygame
 from pygame import K_UP, K_DOWN, K_LEFT, K_RIGHT, K_a, K_w, K_s, K_d
@@ -12,10 +15,18 @@ from malha import NodeGroup
 
 class HighscoreScreen:
     def __init__(self, window):
+        """
+        Este construtor cria uma nova instância da tela de highscore.
+        :@param window: Tela de jogo do PyGame
+        """
         self.window = window
         self.nodes = NodeGroup('assets/tabuleiro.txt')
 
     def update(self):
+        """
+        Este método atualiza a home screen. Além de renderizar a tela de placa,
+        este método lê os dados dos arquivos score e highscore.
+        """
         # Background
         self.window.blit(pygame.image.load("assets/highscore.png"), (0, 0))
 
@@ -33,6 +44,7 @@ class HighscoreScreen:
         if hs < s:
             hs = s
 
+        # Mostra os textos na tela
         white = (255, 255, 255)
         font = pygame.font.SysFont(None, 40)
         txt = font.render('High Score', True, white)
