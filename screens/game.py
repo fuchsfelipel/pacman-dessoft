@@ -40,8 +40,8 @@ class GameScreen:
         # Sprites
         self.sprites = {}
         self.pellets = PointBallGroup("assets/bolinhas.txt")
-        self.sprites["pacman-1"] = Pacman(self.nodes, K_UP, K_DOWN, K_RIGHT, K_LEFT, game_config.Colors.yellow, 5)
-        self.sprites["pacman-2"] = Pacman(self.nodes, K_w, K_s, K_d, K_a, game_config.Colors.orange, 150)
+        self.sprites["pacman-1"] = Pacman(self.nodes, K_UP, K_DOWN, K_RIGHT, K_LEFT, game_config.Colors.yellow, 5, "assets/pacyellow.png")
+        self.sprites["pacman-2"] = Pacman(self.nodes, K_w, K_s, K_d, K_a, game_config.Colors.orange, 150, "assets/pacorange.png")
         self.sprites["pinky"] = Ghost(self.nodes, game_config.Colors.red, 10, "assets/yellow.png")
         self.sprites["blinky"] = Ghost(self.nodes, game_config.Colors.pink, 20, "assets/red.png")
         self.sprites["inky"] = Ghost(self.nodes, game_config.Colors.brown, 30, "assets/pink.png")
@@ -71,7 +71,7 @@ class GameScreen:
         Este método reseta as point_balls. Ele faz parte do PacMan mudar de nível.
         """
         # Se todas as point_balls tiverem sido comidas
-        if self.point_balls_eaten == 250:
+        if self.pellets.is_empty():
             for sprite in self.sprites.values():
                 sprite.reset(self.nodes)
 

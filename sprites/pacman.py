@@ -15,7 +15,7 @@ class Pacman(object):
     Mudanças pontuais de lógica e regras de negócio também ocorreram
     """
 
-    def __init__(self, nodes, key_up, key_down, key_right, key_left, color, x_offset):
+    def __init__(self, nodes, key_up, key_down, key_right, key_left, color, x_offset, image):
         """
         Cria uma nova instância do Pac-Man
         :param nodes: Nós da malha de movimentação
@@ -26,6 +26,7 @@ class Pacman(object):
         self.radius = 10
         self.color = color
         self.x_offset = x_offset
+        self.image = image
 
         # Por padrão o Pac-Man é comido por fantasmas
         self.mode = game_config.PacManStatus.Victim
@@ -235,7 +236,8 @@ class Pacman(object):
         :param screen: Tela do PyGame
         """
         # Desenha um círculo na tela
-        pygame.draw.circle(screen, self.color, self.position.asInt(), self.radius)
+        #pygame.draw.circle(screen, self.color, self.position.asInt(), self.radius)
+        screen.blit(pygame.image.load(self.image), (self.position.x - 10, self.position.y - 10))
         
         # Escreve o Score na tela
 
