@@ -11,7 +11,7 @@ fases infinitas (a velocidade do Pac-Man e dos fantasmas aumente de fase em fase
 A distinção mais importante e divertida é que esta versão é multiplayer!
 
 ## Vídeo
-(Clique aqui para ver o nosso vídeo)[https://alinsperedu-my.sharepoint.com/:f:/g/personal/felipelf2_al_insper_edu_br/EspJrEhy9f9Km8tEyri3xk0B3o4_pC02MMqaCbBLKkUYwQ?e=PJL5Ze]
+[Clique aqui para ver o nosso vídeo](https://alinsperedu-my.sharepoint.com/:f:/g/personal/felipelf2_al_insper_edu_br/EspJrEhy9f9Km8tEyri3xk0B3o4_pC02MMqaCbBLKkUYwQ?e=PJL5Ze)
 
 ## Agradecimentos
 Estre projeto não seria possível sem as aulas do professor Andrew Kurauchi e a Academia Python.
