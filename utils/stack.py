@@ -1,8 +1,11 @@
+"""
+Este módulo cria o tipo stack que representa uma estrutura de dado LIFO.
+Ela foi criada apenas como uma interface simplificada para listas com funções LIFO.
+Adaptado de https://pacmancode.com/stacks
+"""
+
+
 class Stack(object):
-    """
-    Esta classe cria o tipo stack que representa uma estrutura de dado FIFO
-    Adaptado de pacmancode.com
-    """
     def __init__(self):
         self.items = []
 
@@ -19,11 +22,11 @@ class Stack(object):
 
     def pop(self):
         if not self.isEmpty():
-            removedItem = self.items.pop(len(self.items)-1)
+            removedItem = self.items.pop(len(self.items) - 1)
             return removedItem
         return None
 
     def peek(self):
         if not self.isEmpty():
-            return self.items[len(self.items)-1]
+            return self.items[len(self.items) - 1]
         return None

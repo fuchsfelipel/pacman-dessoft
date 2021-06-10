@@ -1,6 +1,5 @@
 # --- Imports ---
 # PyGame
-import time
 import random
 import pygame
 
@@ -8,34 +7,36 @@ import pygame
 import game_config
 import utils.movement_translator
 
-
-class Pinky:
+class Pacman(object):
     """
-    Esta classe define o Pinky.
+    Esta classe define o Pac-Man.
     Em grande parte, sua lógica deve-se ao tutorial pacmancode
     Dito isso, existe uma boa quantidade de código original ou refatorado/otimizado
     Mudanças pontuais de lógica e regras de negócio também ocorreram
     """
 
-    def __init__(self, nodes):
+    def __init__(self, nodes, key_up, key_down, key_right, key_left, color, x_offset, image):
         """
         Cria uma nova instância do Pac-Man
         :param nodes: Nós da malha de movimentação
         """
         # Dados básicos do Pac-Man
-        self.name = "pinky"
+        self.name = "pacman"
         self.collideRadius = 5
         self.radius = 10
-        self.defaultcolor = game_config.Colors.pink
-        self.color = game_config.Colors.pink
+        self.color = color
+        self.x_offset = x_offset
+        self.image = image
+
+        # Por padrão o Pac-Man é comido por fantasmas
+        self.mode = game_config.PacManStatus.Victim
 
         # Loading do ambiente
         self.nodes = nodes
-        self.node = nodes.node_list[40]
+        self.node = nodes.node_list[0]
 
         # Dados de movimentação
-        self.direction = utils.movement_translator.movement_ghosts(random.randint(0,3))
-        #game_config.Movements.STOP
+        self.direction = game_config.Movements.STOP
         self.speed = 100
         self.position = self.node.position.copy()
         self.target = self.node
@@ -45,12 +46,15 @@ class Pinky:
         self.points = 0
         self.lives = game_config.Points.pacman_lives
 
-    def resetPinky(self, nodes):
-        self.node = nodes.node_list[40]
-        self.speed += 0.5 * self.speed
-        self.set_position()
-        self.target = self.node
-        self.direction = utils.movement_translator.movement_ghosts(random.randint(0,3))
+        # Exibição das Vidas
+        self.livesh = game_config.GameDimensions.tile_h
+        self.livesr = game_config.GameDimensions.row_num
+
+        # Teclas
+        self.key_up = key_up
+        self.key_down = key_down
+        self.key_right = key_right
+        self.key_left = key_left
 
     def set_position(self):
         """
@@ -68,8 +72,6 @@ class Pinky:
             self.node = self.node.portal_node
             self.set_position()
 
-    tempDt = 0
-    
     def update(self, dt):
         """
         Este é o método que precisa ser invocado pelo loop de jogo.
@@ -80,21 +82,23 @@ class Pinky:
         self.position += self.direction * self.speed * dt
 
         # Verificar a nova direção do Pac-Man
-        self.tempDt += dt
-        #if (self.tempDt % 1000):
-         #   direction = utils.movement_translator.movement_ghosts(random.randint(0,3))
-            
-          #  self.tempDt = 0
+        direction = utils.movement_translator.movement_translator(pygame.key.get_pressed(), self.key_up, self.key_down, self.key_right, self.key_left)
 
         # Se houver nova direção --> iniciar novo movimento
-        
-        if self.direction:
-            self.move_by_key(self.direction)
+        if direction:
+            self.move_by_key(direction)
 
         # Ou continuar o último...
         else:
             self.move_by_self()
 
+    def reset(self, nodes):
+        self.node = nodes.node_list[0]
+        self.speed += 0.3 * self.speed
+        self.set_position()
+        self.target = self.node
+        self.direction = game_config.Movements.STOP
+        
     def move_by_self(self):
         """
         Este método faz com que o Pac-Man continue seu último movimento
@@ -110,8 +114,7 @@ class Pinky:
                 self.target = self.node.neighbors[self.direction]
             else:
                 self.set_position()
-               # self.direction = game_config.Movements.STOP
-                self.direction = utils.movement_translator.movement_ghosts(random.randint(0,3))
+                self.direction = game_config.Movements.STOP
 
     def move_by_key(self, direction):
         """
@@ -154,8 +157,7 @@ class Pinky:
                     # ou parar o Pac-Man
                     else:
                         self.set_position()
-                        self.direction = utils.movement_translator.movement_ghosts(random.randint(0,3))
-
+                        self.direction = game_config.Movements.STOP
                 except:
                     pass
 
@@ -187,7 +189,7 @@ class Pinky:
         # Vamos inverter o alvo
         self.node, self.target = self.target, self.node
 
-    def eat_point_balls(self, point_list):
+    def eat_point_balls(self, point_list, superpoint_list, ghosts):
         """
         Este método faz com que o Pac-Man coma bolinhas
         :param point_list:
@@ -197,16 +199,36 @@ class Pinky:
             if (self.position - ball.position).magnitudeSquared() <= (ball.radius + self.collideRadius) ** 2:
                 # Soma os pontos ao placar atual
                 self.points += game_config.Points.point_balls
-
-
+                if (ball in superpoint_list):
+                    # Soma os pontos ao placar atual
+                    self.points += game_config.Points.super_point_balls
+                    self.mode = game_config.PacManStatus.Assassin
+                    for ghost in ghosts:
+                        ghost.image = "assets/navy.png"
                 return ball
-
+        if self.points == 5000:
+            self.lives += 1
+            self.points = 0
         pygame.mixer.music.stop()
         return None
 
-    def be_eaten(self):
-        self.node = self.nodes.node_list[0]
-        self.set_position()
+    def collide_with_ghost(self, ghosts):
+        """
+        Este método faz com que o Pac-Man morra ao tocar em um fantasma
+        :param point_list:
+        """
+        for ghost in ghosts:
+            # Se de fato o Pac-Man colidiu com o ponto
+            if (self.position - ghost.position).magnitudeSquared() <= (ghost.radius + self.collideRadius) ** 2:
+                # PacMan morre
+                if self.mode == game_config.PacManStatus.Victim:
+                    self.node = self.nodes.node_list[random.choice([5, 15, 25, 35])]
+                    self.set_position()
+                    self.lives -= 1
+                else:
+                    self.points += game_config.Points.ghost_point
+                    ghost.be_eaten()
+ 
 
     def render(self, screen):
         """
@@ -214,4 +236,22 @@ class Pinky:
         :param screen: Tela do PyGame
         """
         # Desenha um círculo na tela
-        pygame.draw.circle(screen, self.color, self.position.asInt(), self.radius)
+        #pygame.draw.circle(screen, self.color, self.position.asInt(), self.radius)
+        screen.blit(pygame.image.load(self.image), (self.position.x - 10, self.position.y - 10))
+        
+        # Escreve o Score na tela
+
+        white = (255, 255, 255)
+        font = pygame.font.SysFont(None, 40)
+        Hi = font.render('HI', True, white)
+        x = self.x_offset + self.radius + (2 * self.radius + 5) * 4
+        y = (self.livesh - 1) * self.livesr
+        score = font.render(str(self.points), True, white)
+        screen.blit(score, (x + 60, y))
+        screen.blit(Hi, (x, y))
+
+        # Desenha as vidas na tela
+        for i in range(self.lives):
+            x = 5 + self.radius + (2 * self.radius + 5) * i
+            y = self.livesh * (self.livesr - 1)
+            pygame.draw.circle(screen, self.color, (x, y), self.radius)
